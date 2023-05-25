@@ -1,27 +1,13 @@
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { MenuOutlined } from "@ant-design/icons";
-import {
-  Avatar,
-  Badge,
-  Button,
-  Col,
-  Drawer,
-  Image,
-  Layout,
-  Menu,
-  Row,
-} from "antd";
-import Logo from "../../asset/image/M81-Logo-1.png";
+import { Avatar, Button, Col, Drawer, Image, Layout, Menu, Row } from "antd";
 import { useEffect, useState } from "react";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import data from "../../util/constant/menu";
-import CONSTANTS, { loginRoot } from "../../util/constant/CONSTANTS";
-import Search from "antd/es/input/Search";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { loginRoot } from "../../util/constant/CONSTANTS";
 import Profile from "../../asset/image/dummy-avatar.jpg";
 import { getAuthToken } from "../../util/API/authStorage";
-import useHttp from "../../hooks/use-http";
 import { deleteAuthDetails } from "../../util/API/authStorage";
 
 const { Header, Content, Sider } = Layout;
@@ -49,30 +35,31 @@ const items = [
 const AppLayout = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [UserData, setUserData] = useState({});
-  useEffect(() => {
-    const isLogin = getAuthToken() !== undefined && getAuthToken() !== null;
-    // console.log(isLogin, "Login");
-    if (!isLogin) {
-      navigate(loginRoot);
-    }
-  }, [navigate]);
+  const [UserData, setUserData] = useState({ name: "" });
+  // useEffect(() => {
+  // const isLogin = getAuthToken() !== undefined && getAuthToken() !== null;
+  // console.log(isLogin, "Login");
+  // navigate(loginRoot);
+
+  // if (!isLogin) {
+  // }
+  // }, [navigate]);
   const [collapsed, setCollapsed] = useState(true);
-  const API = useHttp();
-  useEffect(() => {
-    if (!(getAuthToken() !== undefined && getAuthToken() !== null)) {
-      return;
-    }
-    if (!CONSTANTS.GETMe) {
-      API.sendRequest(CONSTANTS.API.getMe, (res) => {
-        // console.log(res, "API");
-        CONSTANTS.GETMe = res?.data;
-        setUserData(res?.data);
-      });
-    } else {
-      setUserData(...CONSTANTS.GETMe);
-    }
-  }, []);
+  // const API = useHttp();
+  // useEffect(() => {
+  //   if (!(getAuthToken() !== undefined && getAuthToken() !== null)) {
+  //     return;
+  //   }
+  //   if (!CONSTANTS.GETMe) {
+  //     API.sendRequest(CONSTANTS.API.getMe, (res) => {
+  //       // console.log(res, "API");
+  //       CONSTANTS.GETMe = res?.data;
+  //       setUserData(res?.data);
+  //     });
+  //   } else {
+  //     setUserData(...CONSTANTS.GETMe);
+  //   }
+  // }, []);
   const toggleCollapsed = () => {
     setCollapsed((prev) => !prev);
   };
@@ -119,7 +106,7 @@ const AppLayout = () => {
               onClick={toggleCollapsed}
             ></Icon>
           </div>
-          <div style={{ height: "60px" }}>
+          {/* <div style={{ height: "60px" }}>
             <Row
               justify="center"
               style={{
@@ -148,7 +135,7 @@ const AppLayout = () => {
                 </Row>
               </Col>
             </Row>
-          </div>
+          </div> */}
           <Menu
             defaultSelectedKeys={window.location.pathname}
             activeKey=""
@@ -167,12 +154,16 @@ const AppLayout = () => {
             style={{
               padding: 0,
               backgroundColor: "#FFFFFF",
-              justifyContent: "center",
+              justifyContent: "space-between",
               flexDirection: "column",
               display: "flex",
             }}
           >
-            <Row align="middle" justify="center">
+            <Row
+              align="middle"
+              justify="space-between"
+              style={{ padding: "0px 35px" }}
+            >
               <Col span={6} className="center flex">
                 <Image
                   style={{ height: "55px", width: "70px", background: "black" }}
@@ -180,25 +171,32 @@ const AppLayout = () => {
                   src={process.env.REACT_APP_LOGO}
                 />
               </Col>
-              <Col span={12} style={{ height: "40px" }}>
+              {/* <Col span={12} style={{ height: "40px" }}>
                 <Search className="dashboardSearch" />
-              </Col>
-              <Col span={6} className="center flex">
+              </Col> */}
+              <Col
+                span={6}
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  alignItems: "center",
+                }}
+              >
                 <Col
                   span={12}
                   style={{
                     display: "flex",
-                    justifyContent: "space-evenly",
+                    justifyContent: "end",
                     alignItems: "center",
                   }}
                 >
-                  <Badge dot>
+                  {/* <Badge dot>
                     <IoNotificationsOutline
                       size="2em"
                       color="#BFC5D2"
                       display="flex"
                     />
-                  </Badge>
+                  </Badge> */}
                   <Avatar
                     src={Profile}
                     size={35}
@@ -219,15 +217,17 @@ const AppLayout = () => {
               margin: "0 16px",
             }}
           >
-            {getAuthToken() !== undefined && getAuthToken() !== null && (
+            <Outlet />
+
+            {/* {getAuthToken() !== undefined && getAuthToken() !== null && (
               <Outlet />
-            )}
+            )} */}
           </Content>
         </Layout>
       </Layout>
       {/* <div> */}
       <Drawer
-        title="dwd"
+        title="Profile"
         placement="right"
         closable={false}
         onClose={onClose}
@@ -236,7 +236,7 @@ const AppLayout = () => {
         <div className="flex-x center text-center profile-drawer">
           <div>
             <Avatar
-              size={100}
+              size={50}
               style={{ color: "#fffff", backgroundColor: "#000000" }}
               className="mt10"
               src={Profile}
@@ -254,7 +254,6 @@ const AppLayout = () => {
               danger
               htmlType="submit"
               className="an-14 medium-text mt20 br5"
-              style={{ width: "160px", height: "40px" }}
               onClick={handleLogout}
             >
               Logout

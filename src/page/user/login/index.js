@@ -12,14 +12,15 @@ import { getAuthToken, setAuthDetails } from "../../../util/API/authStorage";
 const LogIn = () => {
   const formRef = React.useRef(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    const isLogin = getAuthToken() !== undefined && getAuthToken() !== null;
-    // console.log(isLogin, "loh", getAuthToken());
-    if (isLogin) {
-      // console.log(isLogin, "loh2", getAuthToken());
-      navigate(appRoot);
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  // const isLogin = getAuthToken() !== undefined && getAuthToken() !== null;
+  // console.log(isLogin, "loh", getAuthToken());
+  // if (isLogin) {
+  //   // console.log(isLogin, "loh2", getAuthToken());
+  //   navigate(appRoot);
+  // }
+  // }, [navigate]);
+  navigate(appRoot);
   const API = useHttp();
   const onFinishFirst = (value) => {
     // console.log(value);

@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import { CSVLink } from "react-csv";
 
 const CustomButton = (props) => {
@@ -7,9 +7,11 @@ const CustomButton = (props) => {
       return (
         <Button
           className="btn-dashboard-icon"
+          type="primary"
           ghost
           icon={props.icon}
           size="large"
+          style={{ margin: "0px 5px" }}
           onClick={props.action}
           {...props.ButtonDefault}
         />
@@ -19,10 +21,12 @@ const CustomButton = (props) => {
       return (
         <CSVLink data={props.data}>
           <Button
-            className="btn-dashboard-icon"
+            className="btn-dashboard-icon "
+            type="primary"
             ghost
             icon={props.icon}
             size="large"
+            style={{ margin: "0px 5px" }}
             onClick={props.action}
             {...props.ButtonDefault}
           />
@@ -35,6 +39,7 @@ const CustomButton = (props) => {
           type="primary"
           size="large"
           onClick={props.action}
+          style={{ margin: "0px 5px" }}
           {...props.ButtonDefault}
         >
           {props.name}

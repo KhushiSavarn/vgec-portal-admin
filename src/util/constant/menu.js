@@ -1,5 +1,5 @@
 import { AiOutlineDashboard } from "react-icons/ai";
-import { BsBoxSeam, BsTruck } from "react-icons/bs";
+import { BsBoxSeam } from "react-icons/bs";
 import { BiTransfer } from "react-icons/bi";
 import { AiOutlineHistory } from "react-icons/ai";
 import { SlWrench } from "react-icons/sl";

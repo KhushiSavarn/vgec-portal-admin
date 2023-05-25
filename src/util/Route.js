@@ -6,26 +6,14 @@ import Registration from "../page/user/Registration";
 import SidePage from "../../src/component/common/SidePage";
 import AppLayout from "../component/layout/AppLayout";
 import Dashboard from "../page/app/dashboard";
-import Employee from "../page/app/employees";
 import { appRoot } from "./constant/CONSTANTS";
 import Inventory from "../page/app/inventory";
-import Maintenance from "../page/app/maintenance";
-import Expenses from "../page/app/expenses";
 import ForgetPassword from "../page/user/Registration/forgetPass";
-import EmployeeDetail from "../page/app/employees/employeeDetail";
 import Transfer from "../page/app/inventory/Transfer";
 import MoveHistory from "../page/app/inventory/Move-History";
 import Equipment from "../page/app/inventory/Equipment";
 import EquipmentDetailPage from "../page/app/inventory/Equipment/equipmentDetail";
-import PlantOMChecklist from "../page/app/plantDetails/Plant-OMChecklist";
-import PlantSetting from "../page/app/plantDetails/Plant-Setting";
-import PlantDetailsPage from "../page/app/plantDetails/Plant-Details";
-import LogBookABTMeter from "../page/app/logBook/LogBook-ABTMeter";
-import LogBookCleanLog from "../page/app/logBook/LogBook-CleanLog";
-import LogBookLog from "../page/app/logBook/LogBook-Log";
 import PurchaseRequest from "../page/app/inventory/Purchase";
-import ExpanseDetails from "../page/app/expenses/Expenses";
-import VehicalExpanse from "../page/app/expenses/Vehical-Expense";
 
 export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
