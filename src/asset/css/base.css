@@ -1,0 +1,369 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Rubik";
+}
+
+.dashboardSearch input {
+  border-radius: 40rem;
+}
+.dashboardSearch .ant-btn {
+  border-radius: 0 1rem 1rem 0 !important;
+}
+.flex {
+  display: flex;
+  justify-content: center;
+}
+.center {
+  align-items: center;
+}
+.profile {
+  border-radius: 100%;
+  border: 1px solid black;
+}
+.notification {
+  padding-inline: 15px;
+}
+.ant-menu-item-selected {
+  border-left: 3px solid blue;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.profile-head {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #2e384d;
+}
+.profile-side {
+  border-radius: 10px;
+}
+.profile-sub {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  /* identical to box height, or 147% */
+
+  color: #bfc5d2;
+}
+
+.container-main {
+  padding: 40px;
+}
+
+.container-head {
+  height: 100px;
+}
+.container-body {
+  height: 100%;
+}
+.btn-dashboard-icon {
+  color: #2c3e50 !important;
+  background-color: rgba(151, 151, 151, 0.1) !important;
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+.btn-dashboard {
+  width: 150px;
+  margin-right: 15px;
+}
+.dashboard-head {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 32px;
+  color: #2e384d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dashboard-headers {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.btn-dashboard-gray-bg {
+  color: #2e384d !important;
+  background-color: rgba(151, 151, 151, 0.1) !important;
+  border: none;
+  margin-right: 15px;
+}
+.btn-dashboard-gray {
+  color: #2e384d !important;
+  border: none;
+}
+.btn-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 21px;
+  /* identical to box height, or 140% */
+
+  text-align: center;
+
+  color: #2e384d;
+}
+
+div#\:rv\: {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33px;
+  letter-spacing: 1.21333px;
+  text-transform: uppercase;
+  color: #8798ad;
+  margin-bottom: 20px;
+}
+
+.pages {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  letter-spacing: -0.6px;
+
+  /* Base/Color/Black #3 */
+
+  color: #8798ad;
+}
+.dashboard-main-frame {
+  background-color: #ffffff;
+}
+.dashboard-head-tab {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  /* padding-left: 15px; */
+  min-width: 115px;
+  justify-content: center;
+}
+.dashboard-tab {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid #bfc5d2;
+}
+.tab-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+  color: #2e384d;
+}
+.dashboard-body-sub {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 32px;
+
+  color: #2e384d;
+}
+.dashboard-body-title {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 40px;
+  letter-spacing: -0.6px;
+
+  color: #2e384d;
+}
+.dashboard-body {
+  padding: 40px;
+  padding-inline: 45px;
+}
+
+.profile-pic-dashboard {
+  position: relative;
+  display: inline-block;
+  height: 140px;
+  width: 140px;
+  border-radius: 100%;
+}
+
+.profile-pic-dashboard:hover .edit-dashboard {
+  display: block;
+}
+
+.edit-dashboard {
+  background-color: rgba(151, 151, 151, 0.6);
+  border-radius: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+}
+.pointer {
+  cursor: pointer;
+}
+.ant-tabs-nav-wrap {
+  display: flex;
+  flex-direction: row-reverse;
+  float: left;
+  /* background-color: #ffffff; */
+}
+.ant-tabs-tab {
+  border-left: 1px solid #bfc5d2 !important;
+  margin-left: 10px;
+  margin: 0px !important;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+th.ant-table-cell {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 1.125px;
+  text-transform: uppercase;
+  color: #b0bac9 !important;
+  padding: 10px !important;
+}
+td.ant-table-cell {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+  padding: 6px !important;
+  letter-spacing: 1.125px;
+  text-transform: uppercase;
+
+  /* Base/Color/Black #3 */
+  color: #8798ad;
+}
+.capitlize {
+  text-transform: capitalize;
+}
+.form-modal-head {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33px;
+  letter-spacing: 1.21333px;
+  text-transform: uppercase;
+
+  color: #8798ad;
+}
+.form-modal-title-items {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  /* or 147% */
+
+  display: flex;
+  align-items: center;
+
+  /* Base/Color/Black #3 */
+
+  color: #8798ad;
+}
+
+/* Dashboard styling */
+.heading-dashboard {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 48px;
+  line-height: 57px;
+  /* identical to box height */
+
+  letter-spacing: -0.6px;
+
+  color: #000000;
+}
+.dashboard-main-dashboard .gutter-box {
+  background: white;
+  border: 1px solid #e8f1f8;
+  padding-left: 24px !important;
+}
+.dashboard-main-dashboard .ant-card-type-inner .ant-card-head {
+  color: #4e73df !important;
+  background: #f8f9fc;
+}
+.dashboard-main-dashboard .ant-card-type-inner .ant-card-head-title {
+  font-size: 18px !important;
+}
+.dashboard-main-dashboard .ant-card-bordered {
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+  border-radius: 3px;
+  border: 1px solid #e3e6f0;
+}
+.dashboard-main-dashboard .ant-btn {
+  background: #4e73df;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  &:hover {
+    color: #fff;
+    background-color: #2e59d9;
+    border-color: #2653d4;
+  }
+}
+.dashboard-main-dashboard .text-span {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 32px;
+  /* identical to box height, or 114% */
+
+  color: #000000;
+}
+.dashboard-main-dashboard .text-title {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  /* identical to box height, or 147% */
+
+  color: #2e384d;
+}
+.dashboard-main-dashboard .text-subtitle {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 22px;
+  /* identical to box height, or 55% */
+
+  text-align: right;
+
+  color: #979797;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+ul.maintanance li {
+  float: left;
+  width: 50%;
+}

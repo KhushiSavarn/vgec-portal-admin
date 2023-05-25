@@ -1,0 +1,106 @@
+.card-employee {
+  width: 320px;
+  height: 150px;
+  background-color: #ffffff;
+}
+.card-e-detail {
+  padding: 20px;
+}
+
+img.ant-image-img.card-e-image {
+  height: 140px;
+}
+.card-e-name {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 22px;
+  white-space: nowrap;
+  color: #2e384d;
+}
+.card-e-details {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  overflow: hidden;
+  height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #8798ad;
+}
+
+/*  Inventory Card css */
+.invCard-main {
+  width: 340px;
+  height: 120px;
+  background-color: #ffffff;
+  border: 1px solid #e0e7ff;
+  border-radius: 5px;
+  padding: 20px;
+}
+.invCard-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+}
+.invCard-detail {
+  /* padding-inline: 20px; */
+  margin-top: -10px;
+  /* margin-left: ; */
+  padding-left: 10px;
+}
+
+img.ant-image-img.invCard-e-image {
+  height: 75px;
+  width: 75px;
+}
+.invCard-e-name {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #2e384d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #2e384d;
+}
+.invCard-e-details {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  overflow: hidden;
+  height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #8798ad;
+}
+/** Uploader **/
+.avtar-upload-parent .ant-upload {
+  width: 140px !important;
+  height: 140px !important;
+}
+.avtar-upload-parent
+  .ant-upload-list
+  .ant-upload-list-picture-circle
+  .ant-upload
+  .ant-upload-select {
+  width: 140px !important;
+  height: 140px !important;
+}
+.avtar-upload-parent .ant-upload-list-item-container {
+  width: 140px !important;
+  height: 140px !important;
+}

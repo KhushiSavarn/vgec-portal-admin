@@ -1,0 +1,11 @@
+{
+  "token": {
+    "colorPrimary": "#722ED1",
+    "fontSize": 16,
+    "borderRadius": 16,
+    "borderRadiusXS": 15,
+    "wireframe": true,
+    "sizeStep": 5,
+    "sizeUnit": 6
+  }
+}
