@@ -87,7 +87,7 @@ const ModalFormCreator = ({
   return (
     <Modal
       open={open}
-      title={<p className="form-modal-head mb25">{name}</p>}
+      title={<p className="text-2xl mb-10 text-slate-500">{name}</p>}
       okText="Submit"
       width={1000}
       {...footer}

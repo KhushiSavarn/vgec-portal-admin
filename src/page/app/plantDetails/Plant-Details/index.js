@@ -2,7 +2,6 @@ import { Col, Row, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import CustomTable from "../../../../component/common/Custom-Table";
 import CustomButton from "../../../../component/common/Custom-Buttons";
-import "../../../../asset/css/setting.css";
 import FormFields from "../../../../component/common/FormFields";
 import { useForm } from "antd/es/form/Form";
 import CONSTANTS from "../../../../util/constant/CONSTANTS";

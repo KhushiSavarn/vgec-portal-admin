@@ -66,24 +66,24 @@ const FormWithButton = ({
   onCreate,
   name = "Create",
   threeField = false,
+  inline = true,
 }) => {
   const [form] = Form.useForm();
   return (
     <>
-      <Row>
-        <Col span={18} className="mt15">
-          <Row>
-            <FormFields
-              formData={formData}
-              menu={menu}
-              formFields={formFields}
-              form={form}
-              normal={true}
-              threeField={threeField}
-            />
-          </Row>
+      <Row className={`${!inline ? "flex justify-center" : ""}`}>
+        <Col span={inline ? 18 : 24} className="">
+          <FormFields
+            formData={formData}
+            menu={menu}
+            formFields={formFields}
+            form={form}
+            normal={true}
+            threeField={threeField}
+          />
         </Col>
-        <Col span={6} className="mt35">
+
+        <Col span={6} className="">
           <Button
             onClick={() => {
               form
@@ -98,7 +98,6 @@ const FormWithButton = ({
             }}
             type="primary"
             ghost
-            block
           >
             {name}
           </Button>

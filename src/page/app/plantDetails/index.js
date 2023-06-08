@@ -1,5 +1,4 @@
 import React from "react";
-import "../../../asset/css/setting.css";
 const PlantDetails = () => {
   return (
     <div>

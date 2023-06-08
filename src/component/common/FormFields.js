@@ -270,7 +270,7 @@ const FormFields = ({
               () => ({
                 validator(_, value) {
                   console.log(value);
-                  if (value && value && /.{10,}$/.exec(value)) {
+                  if (value && /^\d{10}$/.exec(value)) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
@@ -288,6 +288,8 @@ const FormFields = ({
                 width: "100%",
               }}
               value={formData && formData[data.id]}
+              pattern="[1-9]{1}[0-9]{9}"
+              maxLength={10}
             />
           </Form.Item>
         );

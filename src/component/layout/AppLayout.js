@@ -5,10 +5,12 @@ import { Avatar, Button, Col, Drawer, Image, Layout, Menu, Row } from "antd";
 import { useEffect, useState } from "react";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import data from "../../util/constant/menu";
-import { loginRoot } from "../../util/constant/CONSTANTS";
+import CONSTANTS, { loginRoot } from "../../util/constant/CONSTANTS";
 import Profile from "../../asset/image/dummy-avatar.jpg";
 import { getAuthToken } from "../../util/API/authStorage";
 import { deleteAuthDetails } from "../../util/API/authStorage";
+import logo from "../../asset/logos/icon.svg";
+import useHttp from "../../hooks/use-http";
 
 const { Header, Content, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -35,7 +37,7 @@ const items = [
 const AppLayout = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [UserData, setUserData] = useState({ name: "" });
+  const [UserData, setUserData] = useState({});
   // useEffect(() => {
   // const isLogin = getAuthToken() !== undefined && getAuthToken() !== null;
   // console.log(isLogin, "Login");
@@ -45,21 +47,22 @@ const AppLayout = () => {
   // }
   // }, [navigate]);
   const [collapsed, setCollapsed] = useState(true);
-  // const API = useHttp();
-  // useEffect(() => {
-  //   if (!(getAuthToken() !== undefined && getAuthToken() !== null)) {
-  //     return;
-  //   }
-  //   if (!CONSTANTS.GETMe) {
-  //     API.sendRequest(CONSTANTS.API.getMe, (res) => {
-  //       // console.log(res, "API");
-  //       CONSTANTS.GETMe = res?.data;
-  //       setUserData(res?.data);
-  //     });
-  //   } else {
-  //     setUserData(...CONSTANTS.GETMe);
-  //   }
-  // }, []);
+  const api = useHttp();
+  useEffect(() => {
+    if (!(getAuthToken() !== undefined && getAuthToken() !== null)) {
+      return;
+    }
+    if (!CONSTANTS.GETMe) {
+      api.sendRequest(CONSTANTS.API.getMe, (res) => {
+        // console.log(res, "API");
+        CONSTANTS.GETMe = res?.data?.admin;
+        setUserData(res?.data?.admin);
+      });
+    }
+    // } else {
+    //   setUserData(...CONSTANTS.GETMe);
+    // }
+  }, []);
   const toggleCollapsed = () => {
     setCollapsed((prev) => !prev);
   };
@@ -166,9 +169,9 @@ const AppLayout = () => {
             >
               <Col span={6} className="center flex">
                 <Image
-                  style={{ height: "55px", width: "70px", background: "black" }}
+                  style={{ height: "55px", width: "70px" }}
                   preview={false}
-                  src={process.env.REACT_APP_LOGO}
+                  src={logo}
                 />
               </Col>
               {/* <Col span={12} style={{ height: "40px" }}>
@@ -227,7 +230,6 @@ const AppLayout = () => {
       </Layout>
       {/* <div> */}
       <Drawer
-        title="Profile"
         placement="right"
         closable={false}
         onClose={onClose}
@@ -236,24 +238,26 @@ const AppLayout = () => {
         <div className="flex-x center text-center profile-drawer">
           <div>
             <Avatar
-              size={50}
+              size={100}
               style={{ color: "#fffff", backgroundColor: "#000000" }}
-              className="mt10"
+              className="mt-10"
               src={Profile}
             >
               <div style={{ fontWeight: "400", fontSize: "2rem" }}>
                 {/* {UserData.fullname.split(" ")[0].charAt(0).toUpperCase()} */}
               </div>
             </Avatar>
-            <div className="an-24 regular-text mt20">{UserData?.name}</div>
+            <div className="mt-5 text-2xl font-medium">
+              {UserData?.name || "Website Admin"}
+            </div>
             {/* <div className="an-24 regular-text mt20">{UserData?.siteName}</div> */}
-            <div className="an-14 regular-text gray--text">
-              {UserData?.role}
+            <div className="text-slate-500">
+              {UserData?.email || "admin@test.com"}
             </div>
             <Button
               danger
               htmlType="submit"
-              className="an-14 medium-text mt20 br5"
+              className="mt-5 w-40 h-10"
               onClick={handleLogout}
             >
               Logout
@@ -261,11 +265,11 @@ const AppLayout = () => {
           </div>
         </div>
         <hr className="my30" style={{ background: "#E4E8F0" }} />
-        <div>
-          {/* <div className="an-12 medium-text gray--text mt25">NAME</div>
-              <div className="an-15 regular-text mt5 ">{UserData?.username}</div> */}
-          {/* <div className="an-12 medium-text gray--text mt25">ROLE</div>
-              <div className="an-15 regular-text mt5">{UserData?.role}</div> */}
+        {/* <div>
+          <div className="an-12 medium-text gray--text mt25">NAME</div>
+          <div className="an-15 regular-text mt5 ">{UserData?.username}</div>
+          <div className="an-12 medium-text gray--text mt25">ROLE</div>
+          <div className="an-15 regular-text mt5">{UserData?.role}</div>
           <div className="an-12 medium-text gray--text mt25">EMAIL</div>
           <div className="an-15 regular-text mt5">{UserData?.email}</div>
           <div className="an-12 medium-text gray--text mt25">
@@ -280,7 +284,7 @@ const AppLayout = () => {
             {UserData?.mobile && "PHONE"}
           </div>
           <div className="an-15 regular-text mt5">{UserData?.mobile}</div>
-        </div>
+        </div> */}
         {/* <div>
           <span
             style={{ cursor: "pointer" }}

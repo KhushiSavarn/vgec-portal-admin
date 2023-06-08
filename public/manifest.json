@@ -1,19 +1,19 @@
 {
-  "short_name": "Ant-D Template",
-  "name": "Ant-D Template",
+  "short_name": "Dashboard",
+  "name": "Dashboard",
   "icons": [
     {
-      "src": "https://firebasestorage.googleapis.com/v0/b/srs-store.appspot.com/o/TST%2Fblack.svg?alt=media&token=2bf430f3-0beb-4b51-a690-f85c0ac73a6f",
+      "src": "icon.svg",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "https://firebasestorage.googleapis.com/v0/b/srs-store.appspot.com/o/TST%2Fblack.svg?alt=media&token=2bf430f3-0beb-4b51-a690-f85c0ac73a6f",
+      "src": "icon.svg",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "https://firebasestorage.googleapis.com/v0/b/srs-store.appspot.com/o/TST%2Fblack.svg?alt=media&token=2bf430f3-0beb-4b51-a690-f85c0ac73a6f",
+      "src": "icon.svg",
       "type": "image/png",
       "sizes": "512x512"
     }

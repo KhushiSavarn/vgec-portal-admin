@@ -1,5 +1,5 @@
 import React from "react";
-import "../../asset/css/card.css";
+// import "../../asset/css/card.css";
 import defaultImage from "../../asset/image/Inventory.png";
 import { Col, Image, Row } from "antd";
 import { Link } from "react-router-dom";

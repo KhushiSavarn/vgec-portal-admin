@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Col, Form, Image, Input, Row } from "antd";
+import { Button, Card, Col, Form, Image, Input, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import Titler from "../../../component/common/Titler";
 import CONSTANTS, { ROUTES, appRoot } from "../../../util/constant/CONSTANTS";
 import Label from "../../../component/common/Label";
-import Logo from "../../../asset/image/M81-Logo-1.png";
 import useHttp from "../../../hooks/use-http";
 import { getAuthToken, setAuthDetails } from "../../../util/API/authStorage";
+import FormWithButton from "../../../component/common/Form-with-Button";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import Registration from "../Registration";
+import logo from "../../../asset/logos/icon.svg";
 
 const LogIn = () => {
   const formRef = React.useRef(null);
@@ -20,35 +23,54 @@ const LogIn = () => {
   //   navigate(appRoot);
   // }
   // }, [navigate]);
-  navigate(appRoot);
-  const API = useHttp();
+  // navigate(appRoot);
+  const api = useHttp();
   const onFinishFirst = (value) => {
     // console.log(value);
     const payload = {
       email: value.email,
       password: value.password,
     };
-    API.sendRequest(
-      CONSTANTS.API.login,
-      (res) => {
-        console.log(res?.token, "abc");
-        setAuthDetails(res?.token);
-        setLoadings([]);
-        // navigate(appRoot);
-        window.location.assign(appRoot);
-        console.log(
-          getAuthToken() !== undefined && getAuthToken() !== null,
-          "loh2",
-          getAuthToken()
-        );
-      },
-      payload,
-      "logIn Successful"
-    );
+    // API.sendRequest(
+    //   CONSTANTS.API.login,
+    //   (res) => {
+    //     console.log(res?.token, "abc");
+    //     setAuthDetails(res?.token);
+    //     setLoadings([]);
+    //     // navigate(appRoot);
+    //     window.location.assign(appRoot);
+    //     console.log(
+    //       getAuthToken() !== undefined && getAuthToken() !== null,
+    //       "loh2",
+    //       getAuthToken()
+    //     );
+    //   },
+    //   payload,
+    //   "logIn Successful"
+    // );
 
     // notification.success({ message: "Log in ", duration: "2" });
   };
   const [loadings, setLoadings] = useState([]);
+
+  const validateLogin = (value) => {
+    const payload = {
+      email: value.email,
+      password: value.password,
+    };
+    // console.log(payload);
+    api.sendRequest(
+      CONSTANTS.API.login,
+      (res) => {
+        setAuthDetails(res?.token);
+        setLoadings([]);
+        // navigate(appRoot);
+        window.location.assign(appRoot);
+      },
+      payload,
+      "LogIn Successful"
+    );
+  };
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
@@ -65,7 +87,7 @@ const LogIn = () => {
   };
   return (
     <>
-      <Row className="form-2" gutter={[0, 4]}>
+      {/* <Row className="form-2" gutter={[0, 4]}>
         <Col span={24}>
           <div className="login-logo">
             <Image preview={false} src={Logo} />
@@ -156,7 +178,91 @@ const LogIn = () => {
         >
           Don't Have an Account <Link to="/Registration">Register Now!</Link>
         </Col>
-      </Row>
+      </Row> */}
+      <div
+        className="h-screen flex justify-center  items-center"
+        style={{ background: "#121212" }}
+      >
+        <Row className="">
+          <Col span={10} sm={24} xs={24} md={10} lg={10}>
+            <div className="mr-10 mt-14 flex content-center justify-center">
+              <Image
+                src={logo}
+                alt="Bash"
+                preview={false}
+                width={300}
+                className="p-5"
+              />
+            </div>
+          </Col>
+          <Col span={14} sm={24} xs={24} md={14} lg={14}>
+            <Card style={{ background: "#202020", border: "none" }}>
+              <p className="text-3xl pl-4 font-medium	text-white">Login</p>
+              {/* <FormWithButton
+                menu="LOGIN_PAGE_MODAL"
+                name="Login"
+                onCreate={(element) => {
+                  console.log(element);
+                }}
+                inline={false}
+              /> */}
+              <Form
+                name="normal_login"
+                className="login-form"
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={validateLogin}
+              >
+                <Form.Item
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Enter Your Email!",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                    placeholder="Email"
+                    type="email"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Enter Your Password!",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    placeholder="Password"
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    loading={loadings[2]}
+                    onClick={() => {
+                      enterLoading(2);
+                    }}
+                    // disabled
+                  >
+                    Log in
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+        </Row>
+        {/* <Registration /> */}
+      </div>
     </>
   );
 };

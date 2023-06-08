@@ -14,10 +14,30 @@ import MoveHistory from "../page/app/inventory/Move-History";
 import Equipment from "../page/app/inventory/Equipment";
 import EquipmentDetailPage from "../page/app/inventory/Equipment/equipmentDetail";
 import PurchaseRequest from "../page/app/inventory/Purchase";
+import Users from "../page/app/users";
+import Request from "../page/app/request";
+import Bouncers from "../page/app/bouncers";
+import Setting from "../page/app/setting";
+import Events from "../page/app/Events";
+import Feed from "../page/app/feed";
+import Valets from "../page/app/valets";
+import UserDetail from "../page/app/users/user-detail";
+import RequestAboutInfo from "../page/app/request/request-about-info";
+import Clubs from "../page/app/clubs";
 
 export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   DASHBOARD: "/dashboard",
+  USERS: "/users",
+  USERS_DETAIL: "/users/:id",
+  CLUBS: "/clubs",
+  REQUEST: "/request",
+  CLUB_REQUEST: "/request/:id",
+  BOUNCERS: "/bouncers",
+  VALETS: "/valets",
+  FEED: "/feed",
+  EVENTS: "/events",
+  SETTING: "/setting",
   INVENTORY: "/inventory",
   INVENTORY_DETAILS: "/details",
   INVENTORY_MOVEHISTORY: "/movehistory",
@@ -42,20 +62,28 @@ export const ROUTES = {
 };
 
 const LOGIN_ROUTES = [
+  // {
+  //   path: "/",
+  //   element: <SidePage />,
+  //   errorElement: <Error />,
+  //   children: [
+  //     {
+  //       index: true,
+  //       element: <LogIn />,
+  //     },
+  //     {
+  //       path: "registration",
+  //       element: <Registration />,
+  //     },
+  //   ],
+  // },
   {
-    path: "/",
-    element: <SidePage />,
-    errorElement: <Error />,
-    children: [
-      {
-        index: true,
-        element: <LogIn />,
-      },
-      {
-        path: "registration",
-        element: <Registration />,
-      },
-    ],
+    index: true,
+    element: <LogIn />,
+  },
+  {
+    path: "registration",
+    element: <Registration />,
   },
   {
     path: ROUTES.FORGOT_PASSWORD,
@@ -78,6 +106,46 @@ const ALL_ROUTES = [
       {
         path: `${appRoot}${ROUTES.DASHBOARD}`,
         element: <Dashboard />,
+      },
+      {
+        path: `${appRoot}${ROUTES.USERS}`,
+        element: <Users />,
+      },
+      {
+        path: `${appRoot}${ROUTES.CLUBS}`,
+        element: <Clubs />,
+      },
+      {
+        path: `${appRoot}${ROUTES.USERS_DETAIL}`,
+        element: <UserDetail />,
+      },
+      {
+        path: `${appRoot}${ROUTES.REQUEST}`,
+        element: <Request />,
+      },
+      {
+        path: `${appRoot}${ROUTES.CLUB_REQUEST}`,
+        element: <RequestAboutInfo />,
+      },
+      {
+        path: `${appRoot}${ROUTES.BOUNCERS}`,
+        element: <Bouncers />,
+      },
+      {
+        path: `${appRoot}${ROUTES.VALETS}`,
+        element: <Valets />,
+      },
+      {
+        path: `${appRoot}${ROUTES.FEED}`,
+        element: <Feed />,
+      },
+      {
+        path: `${appRoot}${ROUTES.EVENTS}`,
+        element: <Events />,
+      },
+      {
+        path: `${appRoot}${ROUTES.SETTING}`,
+        element: <Setting />,
       },
       {
         path: `${appRoot}${ROUTES.INVENTORY}`,

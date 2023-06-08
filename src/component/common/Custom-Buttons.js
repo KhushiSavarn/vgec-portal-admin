@@ -8,7 +8,6 @@ const CustomButton = (props) => {
         <Button
           className="btn-dashboard-icon"
           type="primary"
-          ghost
           icon={props.icon}
           size="large"
           style={{ margin: "0px 5px" }}
