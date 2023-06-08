@@ -45,16 +45,18 @@ const PageComponent = ({
   const addTableData = (value) => {
     const payload = value;
     // console.log(payload);
-    const ADD_API_CALL = { ...addAPI };
-    api.sendRequest(
-      ADD_API_CALL,
-      () => {
-        setIsModalOpen((prev) => !prev);
-        setRefresh((prev) => !prev);
-      },
-      payload,
-      "Add Data Successfully!!!"
-    );
+    if (addAPI) {
+      const ADD_API_CALL = { ...addAPI };
+      api.sendRequest(
+        ADD_API_CALL,
+        () => {
+          setIsModalOpen((prev) => !prev);
+          setRefresh((prev) => !prev);
+        },
+        payload,
+        "Add Data Successfully!!!"
+      );
+    }
   };
 
   // Delete Data API

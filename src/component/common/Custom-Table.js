@@ -62,9 +62,11 @@ const CustomTable = ({
   };
 
   const CSVData = [];
-  CSVData[0] = CONSTANTS.TABLE[name].map((el) => el.title);
-  dataSource.map((item, index) => {
-    CSVData[index + 1] = CONSTANTS.TABLE[name].map((el) => item[el.dataIndex]);
+  CSVData[0] = CONSTANTS?.TABLE[name]?.map((el) => el.title);
+  dataSource?.map((item, index) => {
+    CSVData[index + 1] = CONSTANTS?.TABLE[name]?.map(
+      (el) => item[el.dataIndex]
+    );
     return 0;
   });
 

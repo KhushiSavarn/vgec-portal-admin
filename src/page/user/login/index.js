@@ -58,18 +58,18 @@ const LogIn = () => {
       email: value.email,
       password: value.password,
     };
+    window.location.assign(appRoot);
     // console.log(payload);
-    api.sendRequest(
-      CONSTANTS.API.login,
-      (res) => {
-        setAuthDetails(res?.token);
-        setLoadings([]);
-        // navigate(appRoot);
-        window.location.assign(appRoot);
-      },
-      payload,
-      "LogIn Successful"
-    );
+    //   api.sendRequest(
+    //     CONSTANTS.API.login,
+    //     (res) => {
+    //       setAuthDetails(res?.token);
+    //       setLoadings([]);
+    //       window.location.assign(appRoot);
+    //     },
+    //     payload,
+    //     "LogIn Successful"
+    //   );
   };
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
