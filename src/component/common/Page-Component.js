@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../../hooks/use-http";
+import { useNavigate } from "react-router-dom";
 import { Button, Image, Spin } from "antd";
 import CustomTable from "./Custom-Table";
 import ModalFormCreator from "./ModalFormCreator";
@@ -7,19 +8,21 @@ import { apiGenerator } from "../../util/functions";
 
 import profile from "../../asset/image/image 2.png";
 import CONSTANTS from "../../util/constant/CONSTANTS";
+import moment from "moment";
 
 const PageComponent = ({
   tableTitle = "Data List",
-  tableHeaders = "MANAGER",
+  tableHeaders = "USERS",
   addModalTitle = "Add Modal Title",
   editModalTitle = "Edit Modal Title",
-  modalFields = "MANAGER_MODAL",
+  modalFields = "USERS_MODAL",
   editModalFields = null,
   modalButton = "Add Button Name",
   getAPI = null,
   formData = false,
   addData = false,
   viewData = false,
+  viewUrl = null,
   addAPI = null,
   deleteData = false,
   deleteAPI = null,
@@ -27,6 +30,7 @@ const PageComponent = ({
   editAPI = null,
   editData = false,
   acceptRejectData = false,
+  checkboxData = false,
   extraResData = "",
   DUMMY_DATA = null,
   params,
@@ -38,12 +42,41 @@ const PageComponent = ({
   const [renderData, setRenderData] = useState([]);
   const [editRenderData, setEditRenderData] = useState(null);
   const api = useHttp();
+  const navigate = useNavigate();
   // console.log(editRenderData);
   // console.log(renderData);
 
   // ADD Data API
   const addTableData = (value) => {
-    const payload = value;
+    console.log({ ...value });
+    let rawPayload = {};
+    const formPayload = new FormData();
+    if (formData) {
+      CONSTANTS.FORM_FIELD.USERS_MODAL.forEach((ele) => {
+        if (ele.type !== "file" && ele.type !== "date") {
+          console.log(value[ele.id]);
+          formPayload.append(ele.id, value[ele.id]);
+        }
+        if (ele.type === "file") {
+          console.log(value[ele.id][0].originFileObj);
+          formPayload.append(ele.id, value[ele.id][0].originFileObj);
+        }
+        if (ele.type === "date") {
+          console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
+          formPayload.append(
+            ele.id,
+            moment(value[ele.id].$d).format("YYYY-MM-DD")
+          );
+        }
+      });
+    } else {
+      rawPayload = value;
+    }
+
+    const payload = formData ? formPayload : rawPayload;
+
+    console.log(payload);
+
     // console.log(payload);
     if (addAPI) {
       const ADD_API_CALL = { ...addAPI };
@@ -62,18 +95,20 @@ const PageComponent = ({
   // Delete Data API
   const deleteTableData = (dataId) => {
     // console.log(dataId);
-    const DELETE_API_CALL = apiGenerator(deleteAPI, {
-      dataId,
-    });
-    // console.log(DELETE_API_CALL);
-    api.sendRequest(
-      DELETE_API_CALL,
-      () => {
-        setRefresh((prev) => !prev);
-      },
-      {},
-      "Delete Data Successfully!!!"
-    );
+    if (deleteAPI) {
+      const DELETE_API_CALL = apiGenerator(deleteAPI, {
+        dataId,
+      });
+      // console.log(DELETE_API_CALL);
+      api.sendRequest(
+        DELETE_API_CALL,
+        () => {
+          setRefresh((prev) => !prev);
+        },
+        {},
+        "Delete Data Successfully!!!"
+      );
+    }
   };
 
   // Edit Data API
@@ -81,39 +116,51 @@ const PageComponent = ({
     const payload = { ...value, isBlocked: editRenderData?.isBlocked };
     const dataId = editRenderData?.id;
     // console.log(payload);
-    const EDIT_API_CALL = apiGenerator(editAPI, {
-      dataId,
-    });
-    // console.log(EDIT_API_CALL);
-    api.sendRequest(
-      EDIT_API_CALL,
-      () => {
-        setRefresh((prev) => !prev);
-        setEditRenderData(null);
-      },
-      payload,
-      "Edit Data Successfully!!!"
-    );
+    if (editAPI) {
+      const EDIT_API_CALL = apiGenerator(editAPI, {
+        dataId,
+      });
+      // console.log(EDIT_API_CALL);
+      api.sendRequest(
+        EDIT_API_CALL,
+        () => {
+          setRefresh((prev) => !prev);
+          setEditRenderData(null);
+        },
+        payload,
+        "Edit Data Successfully!!!"
+      );
+    }
   };
 
   // Block Data API
   const blockTableData = (dataId = null, checked) => {
     const payload = {
-      isBlocked: checked,
+      isBlocked: !checked,
     };
 
-    const BLOCK_API_CALL = apiGenerator(editAPI, {
-      dataId,
-    });
-    // console.log(BLOCK_API_CALL);
-    api.sendRequest(
-      BLOCK_API_CALL,
-      () => {
-        setRefresh((prev) => !prev);
-      },
-      payload
-    );
+    if (editAPI) {
+      const BLOCK_API_CALL = apiGenerator(editAPI, {
+        dataId,
+      });
+      // console.log(BLOCK_API_CALL);
+      api.sendRequest(
+        BLOCK_API_CALL,
+        () => {
+          setRefresh((prev) => !prev);
+        },
+        payload
+      );
+    }
   };
+
+  // Render Page
+  const renderPage = (id) => {
+    if (viewUrl) {
+      navigate(`${viewUrl}${id}`);
+    }
+  };
+
   // Accept Request
   const acceptRequest = (id) => {
     // const payload = {
@@ -165,6 +212,9 @@ const PageComponent = ({
               ...data,
               no: index + 1,
               image: data?.image || profile,
+              profilePic: data?.profilePic || profile,
+              dob: moment(data?.dob).format("DD MMM ,YYYY"),
+              date: moment(data?.date).format("DD MMM ,YYYY"),
             };
 
             // View Button
@@ -173,8 +223,8 @@ const PageComponent = ({
                 ...tableData,
                 view: {
                   id: data?.id,
-                  checked: !data?.isBlocked,
-                  onClick: () => {},
+                  // checked: !data?.isBlocked,
+                  onClick: renderPage,
                 },
               };
             }
@@ -185,8 +235,19 @@ const PageComponent = ({
                 ...tableData,
                 toggle: {
                   id: data?.id,
-                  checked: !data?.isBlocked,
+                  checked: data?.isBlocked,
                   onClick: blockTableData,
+                },
+              };
+            }
+            //  Checkbox Button required
+            if (checkboxData) {
+              tableData = {
+                ...tableData,
+                checkbox: {
+                  id: data?.id,
+                  checked: !data?.privateAcc,
+                  onClick: () => {},
                 },
               };
             }
@@ -237,7 +298,7 @@ const PageComponent = ({
   return (
     <>
       {/* Add Modal */}
-      {addData && (
+      {(addData || formData) && (
         <>
           <Button
             onClick={() => {

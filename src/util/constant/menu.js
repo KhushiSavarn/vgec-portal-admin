@@ -29,41 +29,41 @@ const data = [
     icon: <AiOutlineUser />,
     label: "Users",
   },
-  {
-    id: "clubs",
-    icon: <GiMeshBall />,
-    label: "Clubs",
-  },
-  {
-    id: "request",
-    icon: <HiOutlineUserGroup />,
-    label: "Request",
-  },
-  {
-    id: "bouncers",
-    icon: <RiCustomerService2Fill />,
-    label: "Bouncers",
-  },
-  {
-    id: "valets",
-    icon: <GiCarKey />,
-    label: "Valets",
-  },
-  {
-    id: "feed",
-    icon: <HiOutlineSquares2X2 />,
-    label: "Feed",
-  },
-  {
-    id: "events",
-    icon: <RiCalendarEventFill />,
-    label: "Events",
-  },
-  {
-    id: "setting",
-    icon: <AiOutlineSetting />,
-    label: "Setting",
-  },
+  // {
+  //   id: "clubs",
+  //   icon: <GiMeshBall />,
+  //   label: "Clubs",
+  // },
+  // {
+  //   id: "request",
+  //   icon: <HiOutlineUserGroup />,
+  //   label: "Request",
+  // },
+  // {
+  //   id: "bouncers",
+  //   icon: <RiCustomerService2Fill />,
+  //   label: "Bouncers",
+  // },
+  // {
+  //   id: "valets",
+  //   icon: <GiCarKey />,
+  //   label: "Valets",
+  // },
+  // {
+  //   id: "feed",
+  //   icon: <HiOutlineSquares2X2 />,
+  //   label: "Feed",
+  // },
+  // {
+  //   id: "events",
+  //   icon: <RiCalendarEventFill />,
+  //   label: "Events",
+  // },
+  // {
+  //   id: "setting",
+  //   icon: <AiOutlineSetting />,
+  //   label: "Setting",
+  // },
   {
     id: "inventory",
     icon: <BsBoxSeam />,

@@ -170,40 +170,46 @@ const Dashboard = () => {
         <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
           <Card size="small" className="p-5">
             <div>
-              <p className="font-semibold text-slate-400">Total User</p>
-              <p className="pt-2 font-medium">12</p>
+              <p className="font-semibold text-lg text-slate-400">Total User</p>
+              <p className="text-xl font-medium">12</p>
             </div>
           </Card>
         </Col>
         <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
           <Card size="small" className="p-5">
             <div>
-              <p className="font-semibold text-slate-400">Total Club</p>
-              <p className="pt-2 font-medium">12</p>
+              <p className="font-semibold text-lg text-slate-400">Total Club</p>
+              <p className="text-xl font-medium">12</p>
             </div>
           </Card>
         </Col>
         <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
           <Card size="small" className="p-5">
             <div>
-              <p className="font-semibold text-slate-400">Total Bouncer</p>
-              <p className="pt-2 font-medium">150</p>
+              <p className="font-semibold text-lg text-slate-400">
+                Total Bouncer
+              </p>
+              <p className="text-xl font-medium">150</p>
             </div>
           </Card>
         </Col>
         <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
           <Card size="small" className="p-5">
             <div>
-              <p className="font-semibold text-slate-400">Total Valet</p>
-              <p className="pt-2 font-medium">150</p>
+              <p className="font-semibold text-lg text-slate-400">
+                Total Valet
+              </p>
+              <p className="text-xl font-medium">150</p>
             </div>
           </Card>
         </Col>
         <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
           <Card size="small" className="p-5">
             <div>
-              <p className="font-semibold text-slate-400">Total Event</p>
-              <p className="pt-2 font-medium">15</p>
+              <p className="font-semibold text-lg text-slate-400">
+                Total Event
+              </p>
+              <p className="text-xl font-medium">15</p>
             </div>
           </Card>
         </Col>

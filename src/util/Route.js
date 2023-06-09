@@ -3,27 +3,12 @@ import Error from "../page/error";
 import UnAuthorize from "../page/unAuthorize";
 import LogIn from "../page/user/login";
 import Registration from "../page/user/Registration";
-import SidePage from "../../src/component/common/SidePage";
 import AppLayout from "../component/layout/AppLayout";
 import Dashboard from "../page/app/dashboard";
 import { appRoot } from "./constant/CONSTANTS";
-import Inventory from "../page/app/inventory";
 import ForgetPassword from "../page/user/Registration/forgetPass";
-import Transfer from "../page/app/inventory/Transfer";
-import MoveHistory from "../page/app/inventory/Move-History";
-import Equipment from "../page/app/inventory/Equipment";
-import EquipmentDetailPage from "../page/app/inventory/Equipment/equipmentDetail";
-import PurchaseRequest from "../page/app/inventory/Purchase";
 import Users from "../page/app/users";
-import Request from "../page/app/request";
-import Bouncers from "../page/app/bouncers";
-import Setting from "../page/app/setting";
-import Events from "../page/app/Events";
-import Feed from "../page/app/feed";
-import Valets from "../page/app/valets";
 import UserDetail from "../page/app/users/user-detail";
-import RequestAboutInfo from "../page/app/request/request-about-info";
-import Clubs from "../page/app/clubs";
 
 export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
@@ -111,74 +96,74 @@ const ALL_ROUTES = [
         path: `${appRoot}${ROUTES.USERS}`,
         element: <Users />,
       },
-      {
-        path: `${appRoot}${ROUTES.CLUBS}`,
-        element: <Clubs />,
-      },
+      // {
+      //   path: `${appRoot}${ROUTES.CLUBS}`,
+      //   element: <Clubs />,
+      // },
       {
         path: `${appRoot}${ROUTES.USERS_DETAIL}`,
         element: <UserDetail />,
       },
-      {
-        path: `${appRoot}${ROUTES.REQUEST}`,
-        element: <Request />,
-      },
-      {
-        path: `${appRoot}${ROUTES.CLUB_REQUEST}`,
-        element: <RequestAboutInfo />,
-      },
-      {
-        path: `${appRoot}${ROUTES.BOUNCERS}`,
-        element: <Bouncers />,
-      },
-      {
-        path: `${appRoot}${ROUTES.VALETS}`,
-        element: <Valets />,
-      },
-      {
-        path: `${appRoot}${ROUTES.FEED}`,
-        element: <Feed />,
-      },
-      {
-        path: `${appRoot}${ROUTES.EVENTS}`,
-        element: <Events />,
-      },
-      {
-        path: `${appRoot}${ROUTES.SETTING}`,
-        element: <Setting />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}`,
-        element: (
-          <Navigate
-            to={`${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_DETAILS}`}
-          />
-        ),
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_DETAILS}`,
-        element: <Inventory />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_MOVEHISTORY}`,
-        element: <MoveHistory />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_EQUIPMENT}`,
-        element: <Equipment />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_EQUIPMENT_DETAILS}`,
-        element: <EquipmentDetailPage />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_TRANSFER}`,
-        element: <Transfer />,
-      },
-      {
-        path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_PURCHASE}`,
-        element: <PurchaseRequest />,
-      },
+      // {
+      //   path: `${appRoot}${ROUTES.REQUEST}`,
+      //   element: <Request />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.CLUB_REQUEST}`,
+      //   element: <RequestAboutInfo />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.BOUNCERS}`,
+      //   element: <Bouncers />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.VALETS}`,
+      //   element: <Valets />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.FEED}`,
+      //   element: <Feed />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.EVENTS}`,
+      //   element: <Events />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.SETTING}`,
+      //   element: <Setting />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}`,
+      //   element: (
+      //     <Navigate
+      //       to={`${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_DETAILS}`}
+      //     />
+      //   ),
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_DETAILS}`,
+      //   element: <Inventory />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_MOVEHISTORY}`,
+      //   element: <MoveHistory />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_EQUIPMENT}`,
+      //   element: <Equipment />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_EQUIPMENT_DETAILS}`,
+      //   element: <EquipmentDetailPage />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_TRANSFER}`,
+      //   element: <Transfer />,
+      // },
+      // {
+      //   path: `${appRoot}${ROUTES.INVENTORY}${ROUTES.INVENTORY_PURCHASE}`,
+      //   element: <PurchaseRequest />,
+      // },
       //   {
       //     path: `${appRoot}${ROUTES.EXPENSES}`,
       //     element: <Expenses />,

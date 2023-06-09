@@ -89,7 +89,7 @@ const ModalFormCreator = ({
       open={open}
       title={<p className="text-2xl mb-10 text-slate-500">{name}</p>}
       okText="Submit"
-      width={1000}
+      width={700}
       {...footer}
       cancelButtonProps={{ style: { display: "none" } }}
       className="form-modal-title"

@@ -1,21 +1,30 @@
-import React, { useState } from "react";
-import { Button, Card, Col, Input, Row } from "antd";
-import PageHeader from "../../../component/common/page-Header";
-import CustomTable from "../../../component/common/Custom-Table";
-import Label from "../../../component/common/Label";
+import React from "react";
+import PageComponent from "../../../component/common/Page-Component";
 import { useNavigate } from "react-router-dom";
-import ModalFormCreator from "../../../component/common/ModalFormCreator";
-import Heading from "../../../component/common/Heading";
 
 const Users = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const userDetail = (id) => {
     navigate(`/app/users/${id}`);
   };
-
-  const adduserData = () => {};
+  const filterList = [
+    {
+      id: 1,
+      label: "Private Account",
+      value: "private account",
+    },
+    {
+      id: 2,
+      label: "Age Range",
+      value: "age",
+    },
+    {
+      id: 3,
+      label: "Gender",
+      value: "gender",
+    },
+  ];
 
   const DUMMY_DATA = [
     {
@@ -36,7 +45,7 @@ const Users = () => {
         id: 1,
         onClick: userDetail,
       },
-      account: {
+      checkbox: {
         checked: true,
         id: 1,
         onClick: () => {},
@@ -63,7 +72,7 @@ const Users = () => {
         id: 2,
         onClick: () => {},
       },
-      account: {
+      checkbox: {
         checked: true,
         id: 2,
         onClick: () => {},
@@ -76,39 +85,26 @@ const Users = () => {
   ];
   return (
     <>
-      <Button
-        onClick={() => {
-          setIsModalOpen((prev) => !prev);
-        }}
-        className=" mt-5 w-28"
-        type="primary"
-      >
-        Add User
-      </Button>
-      <ModalFormCreator
-        open={isModalOpen}
-        onCreate={adduserData}
-        onCancel={() => {
-          setIsModalOpen((prev) => !prev);
-        }}
-        name="Add New User"
-        menu="USERS_MODAL"
-      />
-
-      <CustomTable
-        // dataSource={data.slice(inventoryDisplay, inventoryDisplay + 10)}
-        dataSource={DUMMY_DATA}
-        title="Users List"
-        name="USERS"
-        Other={{
-          onRow: (row) => ({
-            onClick: () => {
-              // console.log("Row", row);
-              // setFormIventoryData({ ...row });
-              // setOpenEditRow(true);
-            },
-          }),
-        }}
+      <PageComponent
+        tableHeaders="USERS"
+        tableTitle="Users List"
+        // getAPI={CONSTANTS.API.getUsers}
+        DUMMY_DATA={DUMMY_DATA}
+        extraResData="users"
+        addData
+        modalButton="Add New User"
+        addModalTitle="Add New User"
+        modalFields="USERS_MODAL"
+        viewData
+        viewUrl="/app/users/"
+        blockData
+        // editAPI={CONSTANTS.API.editUser}
+        deleteData
+        // deleteAPI={CONSTANTS.API.deleteUsers}
+        checkboxData
+        formData
+        filterparmas
+        filterList={filterList}
       />
     </>
   );

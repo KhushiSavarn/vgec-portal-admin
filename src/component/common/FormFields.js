@@ -48,10 +48,10 @@ const FormFields = ({
           <Form.Item
             name={data.name}
             id={data.id}
-            className="form"
-            initialValue={
-              data?.defaultValue ? dayjs(data?.defaultValue) : dayjs(new Date())
-            }
+            className="form mt-2"
+            // initialValue={
+            //   data?.defaultValue ? dayjs(data?.defaultValue) : dayjs(new Date())
+            // }
             rules={[
               {
                 type: "object",
@@ -77,7 +77,7 @@ const FormFields = ({
           <Form.Item
             name={data.name}
             id={data.id}
-            className="form"
+            className="form mt-2"
             initialValue={
               data?.defaultValue
                 ? dayjs(moment(data?.defaultValue))
@@ -108,7 +108,7 @@ const FormFields = ({
           <Form.Item
             name={data.name}
             id={data.id}
-            className="form"
+            className="form mt-2"
             rules={[
               {
                 type: "text",
@@ -135,7 +135,7 @@ const FormFields = ({
             <Form.Item
               name={data.name}
               id={data.id}
-              className="form"
+              className="form mt-2"
               initialValue={data?.defaultValue}
               hasFeedback
               rules={[
@@ -202,7 +202,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             id={data.id}
             valuePropName="fileList"
             getValueFromEvent={normFile}
@@ -230,7 +230,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             rules={[
               {
                 required: data?.required,
@@ -257,7 +257,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             rules={[
               // {
               //   required: data?.required,
@@ -269,7 +269,6 @@ const FormFields = ({
               },
               () => ({
                 validator(_, value) {
-                  console.log(value);
                   if (value && /^\d{10}$/.exec(value)) {
                     return Promise.resolve();
                   }
@@ -297,7 +296,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             id={data.id}
             required={data?.required}
             valuePropName="checked"
@@ -315,7 +314,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             rules={[
               {
                 required: data?.required,
@@ -344,7 +343,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             rules={[
               {
                 required: data?.required,
@@ -388,7 +387,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form"
+            className="form mt-2"
             id={data.id}
             required={data?.required}
             rules={rule}
