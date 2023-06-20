@@ -30,7 +30,9 @@ const PageComponent = ({
   editAPI = null,
   editData = false,
   acceptRejectData = false,
+  acceptRejectAPI = null,
   checkboxData = false,
+  dateTime = false,
   extraResData = "",
   DUMMY_DATA = null,
   params,
@@ -52,21 +54,40 @@ const PageComponent = ({
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
-      CONSTANTS.FORM_FIELD.USERS_MODAL.forEach((ele) => {
-        if (ele.type !== "file" && ele.type !== "date") {
-          console.log(value[ele.id]);
+      CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
+        if (
+          ele.type !== "file" &&
+          ele.type !== "date" &&
+          ele.type !== "number"
+        ) {
+          // console.log(value[ele.id]);
           formPayload.append(ele.id, value[ele.id]);
         }
+        if (ele.type === "number") {
+          // console.log(value[ele.id]);
+          formPayload.append(ele.id, +value[ele.id]);
+        }
         if (ele.type === "file") {
-          console.log(value[ele.id][0].originFileObj);
+          // console.log(value[ele.id][0].originFileObj);
           formPayload.append(ele.id, value[ele.id][0].originFileObj);
         }
         if (ele.type === "date") {
-          console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
-          formPayload.append(
-            ele.id,
-            moment(value[ele.id].$d).format("YYYY-MM-DD")
-          );
+          if (dateTime) {
+            // console.log('data time show');
+            // console.log(moment((value[ele.id]).$d).format("YYYY-MM-DD"));
+            // console.log(moment((value[ele.id]).$d).format("HH:mm:ss"));
+            const dateTimeValue = `${moment(value[ele.id].$d).format(
+              "YYYY-MM-DD"
+            )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
+            // console.log(dateTimeValue);
+            formPayload.append(ele.id, dateTimeValue);
+          } else {
+            // console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
+            formPayload.append(
+              ele.id,
+              moment(value[ele.id].$d).format("YYYY-MM-DD")
+            );
+          }
         }
       });
     } else {
@@ -75,7 +96,7 @@ const PageComponent = ({
 
     const payload = formData ? formPayload : rawPayload;
 
-    console.log(payload);
+    // console.log(payload);
 
     // console.log(payload);
     if (addAPI) {
@@ -94,7 +115,7 @@ const PageComponent = ({
 
   // Delete Data API
   const deleteTableData = (dataId) => {
-    // console.log(dataId);
+    console.log(dataId);
     if (deleteAPI) {
       const DELETE_API_CALL = apiGenerator(deleteAPI, {
         dataId,
@@ -113,7 +134,51 @@ const PageComponent = ({
 
   // Edit Data API
   const editTableData = (value) => {
-    const payload = { ...value, isBlocked: editRenderData?.isBlocked };
+     let rawPayload = {};
+     const formPayload = new FormData();
+     if (formData) {
+       CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
+         if (
+           ele.type !== "file" &&
+           ele.type !== "date" &&
+           ele.type !== "number"
+         ) {
+           // console.log(value[ele.id]);
+           formPayload.append(ele.id, value[ele.id]);
+         }
+         if (ele.type === "number") {
+           // console.log(value[ele.id]);
+           formPayload.append(ele.id, +value[ele.id]);
+         }
+         if (ele.type === "file" && value[ele.id][0].originFileObj) {
+           // console.log(value[ele.id][0].originFileObj);
+           formPayload.append(ele.id, value[ele.id][0].originFileObj);
+         }
+         if (ele.type === "date") {
+           if (dateTime) {
+             const dateTimeValue = `${moment(value[ele.id].$d).format(
+               "YYYY-MM-DD"
+             )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
+             // console.log(dateTimeValue);
+             formPayload.append(ele.id, dateTimeValue);
+           } else {
+             formPayload.append(
+               ele.id,
+               moment(value[ele.id].$d).format("YYYY-MM-DD")
+             );
+           }
+         }
+       });
+     } else {
+       rawPayload = value;
+     }
+
+     const payload = formData ? formPayload : rawPayload;
+    if (blockData) {
+      payload = { ...value, isBlocked: editRenderData?.isBlocked };
+    } else {
+      payload = value;
+    }
     const dataId = editRenderData?.id;
     // console.log(payload);
     if (editAPI) {
@@ -162,36 +227,44 @@ const PageComponent = ({
   };
 
   // Accept Request
-  const acceptRequest = (id) => {
-    // const payload = {
-    //   accept: true,
-    //   ClubId: id,
-    // };
-    // console.log(payload);
-    // api.sendRequest(
-    //   CONSTANTS.API.acceptOrRejectRequest,
-    //   () => {
-    //     setRefresh((prev) => !prev);
-    //   },
-    //   payload,
-    //   "Request Accepted"
-    // );
+  const acceptRequest = (dataId) => {
+    const payload = {
+      approve: true,
+    };
+    console.log(payload);
+    if (acceptRejectAPI) {
+      const ACCEPT_API_CALL = apiGenerator(acceptRejectAPI, {
+        dataId,
+      });
+      api.sendRequest(
+        ACCEPT_API_CALL,
+        () => {
+          setRefresh((prev) => !prev);
+        },
+        payload,
+        "Request Accepted Successfully!!!"
+      );
+    }
   };
   // Reject Request
-  const rejectRequest = (id) => {
-    // const payload = {
-    //   accept: false,
-    //   ClubId: id,
-    // };
-    // console.log(payload);
-    // api.sendRequest(
-    //   CONSTANTS.API.acceptOrRejectRequest,
-    //   () => {
-    //     setRefresh((prev) => !prev);
-    //   },
-    //   payload,
-    //   "Request Rejected"
-    // );
+  const rejectRequest = (dataId) => {
+    const payload = {
+      approve: false,
+    };
+    console.log(payload);
+    if (acceptRejectAPI) {
+      const REJECT_API_CALL = apiGenerator(acceptRejectAPI, {
+        dataId,
+      });
+      api.sendRequest(
+        REJECT_API_CALL,
+        () => {
+          setRefresh((prev) => !prev);
+        },
+        payload,
+        "Request Rejected Successfully!!!"
+      );
+    }
   };
 
   // Render Data API
@@ -213,8 +286,11 @@ const PageComponent = ({
               no: index + 1,
               image: data?.image || profile,
               profilePic: data?.profilePic || profile,
-              dob: moment(data?.dob).format("DD MMM ,YYYY"),
+              time: moment(data?.time).format("HH:mm A"),
               date: moment(data?.date).format("DD MMM ,YYYY"),
+              fullDate: `${moment(data?.startDate).format(
+                "DD MMM ,YYYY"
+              )} to ${moment(data?.endDate).format("DD MMM ,YYYY")}`,
             };
 
             // View Button
