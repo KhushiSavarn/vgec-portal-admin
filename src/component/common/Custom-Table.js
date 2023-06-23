@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Input, Pagination, Row, Select, Table } from "antd";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import { CSVLink } from "react-csv";
 import Search from "antd/es/transfer/search";
 import Heading from "./Heading";
 import { Option } from "antd/es/mentions";
+import useHttp from "../../hooks/use-http";
+import CustomSearchBar from "./Custom-search";
 
 const CustomTable = ({
   name,
@@ -13,12 +15,19 @@ const CustomTable = ({
   onChange,
   Other = {},
   extraclass,
+  dataBaseSearch = false,
+  searchAPI = null,
   filterparmas = false,
+  isSearch,
   filterList = [],
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(10);
   const [userInput, setUserInput] = useState("");
+  const [renderData, setRenderData] = useState([]);
+  const api = useHttp();
+
+  // console.log(dataSource?.length);
 
   // Set Number of Pages
   const handleChangePage = (page, pageSize) => {
@@ -36,16 +45,25 @@ const CustomTable = ({
   };
 
   // Search Filter
-  const filterData = dataSource?.filter(
+  const filterData = renderData?.filter(
     (ele) =>
       userInput.trim() === "" ||
       JSON.stringify(ele)?.toLowerCase()?.includes(userInput)
   );
 
   const searchHandler = (e) => {
-    console.log(e.target.value.toLowerCase());
+    // console.log(e.target.value.toLowerCase());
     setUserInput(e.target.value.toLowerCase());
   };
+
+  // const dataBaseSearchHandler = (e) => {
+  //   const payload = {
+  //     keyword: e.target.value.toLowerCase(),
+  //   };
+
+  //   api.sendRequest(, () => { }, payload);
+
+  // };
 
   // Set Number Items per Page
   const paginatedData = filterData?.slice(
@@ -62,13 +80,16 @@ const CustomTable = ({
   };
 
   const CSVData = [];
-  CSVData[0] = CONSTANTS?.TABLE[name]?.map((el) => el.title);
-  dataSource?.map((item, index) => {
-    CSVData[index + 1] = CONSTANTS?.TABLE[name]?.map(
-      (el) => item[el.dataIndex]
-    );
+  CSVData[0] = CONSTANTS.TABLE[name]?.map((el) => el.title);
+  renderData?.map((item, index) => {
+    CSVData[index + 1] = CONSTANTS.TABLE[name]?.map((el) => item[el.dataIndex]);
     return 0;
   });
+  useEffect(() => {
+    if (dataSource.length !== 0) {
+      setRenderData(dataSource);
+    }
+  }, []);
 
   return (
     <Row className="my-5">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../../hooks/use-http";
 import { useNavigate } from "react-router-dom";
-import { Button, Image, Spin } from "antd";
+import { Button, Card, Col, DatePicker, Image, Row, Spin } from "antd";
 import CustomTable from "./Custom-Table";
 import ModalFormCreator from "./ModalFormCreator";
 import { apiGenerator } from "../../util/functions";
@@ -9,6 +9,9 @@ import { apiGenerator } from "../../util/functions";
 import profile from "../../asset/image/image 2.png";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import moment from "moment";
+import dayjs from "dayjs";
+import Heading from "./Heading";
+import CustomSearchBar from "./Custom-search";
 
 const PageComponent = ({
   tableTitle = "Data List",
@@ -19,34 +22,48 @@ const PageComponent = ({
   editModalFields = null,
   modalButton = "Add Button Name",
   getAPI = null,
+  getData = (res) => res,
   formData = false,
   addData = false,
   viewData = false,
-  viewUrl = null,
+  viewFunction = (res) => res,
   addAPI = null,
   deleteData = false,
   deleteAPI = null,
   blockData = false,
   editAPI = null,
   editData = false,
+  editformData = false,
   acceptRejectData = false,
   acceptRejectAPI = null,
   checkboxData = false,
   dateTime = false,
   extraResData = "",
   DUMMY_DATA = null,
-  params,
   filterparmas = false,
+  dataBaseSearch = false,
+  searchfilter = false,
+  isSearch = false,
+  searchAPI = null,
   filterList = [],
+  datefilter = false,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [renderData, setRenderData] = useState([]);
+  // const [filterData, setFilterData] = useState([])
   const [editRenderData, setEditRenderData] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [dates, setDates] = useState({
+    startDate: null,
+    endDate: null,
+  });
   const api = useHttp();
   const navigate = useNavigate();
   // console.log(editRenderData);
-  // console.log(renderData);
+  console.log(dates);
+
+  const { RangePicker } = DatePicker;
 
   // ADD Data API
   const addTableData = (value) => {
@@ -54,40 +71,21 @@ const PageComponent = ({
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
-      CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
-        if (
-          ele.type !== "file" &&
-          ele.type !== "date" &&
-          ele.type !== "number"
-        ) {
-          // console.log(value[ele.id]);
+      CONSTANTS.FORM_FIELD.USERS_MODAL.forEach((ele) => {
+        if (ele.type !== "file" && ele.type !== "date") {
+          console.log(value[ele.id]);
           formPayload.append(ele.id, value[ele.id]);
         }
-        if (ele.type === "number") {
-          // console.log(value[ele.id]);
-          formPayload.append(ele.id, +value[ele.id]);
-        }
         if (ele.type === "file") {
-          // console.log(value[ele.id][0].originFileObj);
+          console.log(value[ele.id][0].originFileObj);
           formPayload.append(ele.id, value[ele.id][0].originFileObj);
         }
         if (ele.type === "date") {
-          if (dateTime) {
-            // console.log('data time show');
-            // console.log(moment((value[ele.id]).$d).format("YYYY-MM-DD"));
-            // console.log(moment((value[ele.id]).$d).format("HH:mm:ss"));
-            const dateTimeValue = `${moment(value[ele.id].$d).format(
-              "YYYY-MM-DD"
-            )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
-            // console.log(dateTimeValue);
-            formPayload.append(ele.id, dateTimeValue);
-          } else {
-            // console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
-            formPayload.append(
-              ele.id,
-              moment(value[ele.id].$d).format("YYYY-MM-DD")
-            );
-          }
+          console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
+          formPayload.append(
+            ele.id,
+            moment(value[ele.id].$d).format("YYYY-MM-DD")
+          );
         }
       });
     } else {
@@ -115,7 +113,7 @@ const PageComponent = ({
 
   // Delete Data API
   const deleteTableData = (dataId) => {
-    console.log(dataId);
+    // console.log(dataId);
     if (deleteAPI) {
       const DELETE_API_CALL = apiGenerator(deleteAPI, {
         dataId,
@@ -134,53 +132,54 @@ const PageComponent = ({
 
   // Edit Data API
   const editTableData = (value) => {
-     let rawPayload = {};
-     const formPayload = new FormData();
-     if (formData) {
-       CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
-         if (
-           ele.type !== "file" &&
-           ele.type !== "date" &&
-           ele.type !== "number"
-         ) {
-           // console.log(value[ele.id]);
-           formPayload.append(ele.id, value[ele.id]);
-         }
-         if (ele.type === "number") {
-           // console.log(value[ele.id]);
-           formPayload.append(ele.id, +value[ele.id]);
-         }
-         if (ele.type === "file" && value[ele.id][0].originFileObj) {
-           // console.log(value[ele.id][0].originFileObj);
-           formPayload.append(ele.id, value[ele.id][0].originFileObj);
-         }
-         if (ele.type === "date") {
-           if (dateTime) {
-             const dateTimeValue = `${moment(value[ele.id].$d).format(
-               "YYYY-MM-DD"
-             )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
-             // console.log(dateTimeValue);
-             formPayload.append(ele.id, dateTimeValue);
-           } else {
-             formPayload.append(
-               ele.id,
-               moment(value[ele.id].$d).format("YYYY-MM-DD")
-             );
-           }
-         }
-       });
-     } else {
-       rawPayload = value;
-     }
-
-     const payload = formData ? formPayload : rawPayload;
-    if (blockData) {
-      payload = { ...value, isBlocked: editRenderData?.isBlocked };
+    let rawPayload = {};
+    console.log(value);
+    const formPayload = new FormData();
+    if (editformData) {
+      CONSTANTS.FORM_FIELD[
+        editModalFields ? editModalFields : modalFields
+      ].forEach((ele) => {
+        if (
+          ele.type !== "file" &&
+          ele.type !== "date" &&
+          ele.type !== "number"
+        ) {
+          // console.log(value[ele.id]);
+          formPayload.append(ele.id, value[ele.id]);
+        }
+        if (ele.type === "number") {
+          // console.log(value[ele.id]);
+          formPayload.append(ele.id, +value[ele.id]);
+        }
+        if (ele.type === "file" && value[ele?.id]) {
+          // console.log(value[ele.id][0].originFileObj);
+          formPayload.append(ele.id, value[ele?.id][0]?.originFileObj);
+        }
+        if (ele.type === "date") {
+          if (dateTime) {
+            const dateTimeValue = `${moment(value[ele.id].$d).format(
+              "YYYY-MM-DD"
+            )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
+            // console.log(dateTimeValue);
+            formPayload.append(ele.id, dateTimeValue);
+          } else {
+            formPayload.append(
+              ele.id,
+              moment(value[ele.id].$d).format("YYYY-MM-DD")
+            );
+          }
+        }
+      });
     } else {
-      payload = value;
+      rawPayload = value;
     }
+
+    const payload = editformData ? formPayload : rawPayload;
+    // if (blockData) {
+    //   payload = { ...payload, isBlocked: editRenderData?.isBlocked };
+    // }
     const dataId = editRenderData?.id;
-    // console.log(payload);
+    console.log(payload);
     if (editAPI) {
       const EDIT_API_CALL = apiGenerator(editAPI, {
         dataId,
@@ -216,13 +215,6 @@ const PageComponent = ({
         },
         payload
       );
-    }
-  };
-
-  // Render Page
-  const renderPage = (id) => {
-    if (viewUrl) {
-      navigate(`${viewUrl}${id}`);
     }
   };
 
@@ -267,112 +259,176 @@ const PageComponent = ({
     }
   };
 
+  // Date Filter
+  const dateFilterFunction = (e) => {
+    console.log(e);
+    console.log(dayjs(e[0]).format("YYYY-MM-DD"));
+    console.log(dayjs(e[1]).format("YYYY-MM-DD"));
+    setDates({
+      startDate: dayjs(e[0]).format("YYYY-MM-DD"),
+      endDate: dayjs(e[1]).format("YYYY-MM-DD"),
+    });
+  };
+
+  // Add Requried Buttons
+  const tableData = (res) => {
+    const answer = res?.map((data, index) => {
+      let tableData = {
+        ...data,
+        no: index + 1,
+      };
+
+      // View Button
+      if (viewData) {
+        tableData = {
+          ...tableData,
+          view: {
+            id: data?.id,
+            // checked: !data?.isBlocked,
+            onClick: viewFunction,
+          },
+        };
+      }
+
+      //  Block Button required
+      if (blockData) {
+        tableData = {
+          ...tableData,
+          toggle: {
+            id: data?.id,
+            checked: data?.isBlocked,
+            onClick: blockTableData,
+          },
+        };
+      }
+      //  Checkbox Button required
+      if (checkboxData) {
+        tableData = {
+          ...tableData,
+          checkbox: {
+            id: data?.id,
+            checked: !data?.privateAcc,
+            onClick: () => {},
+          },
+        };
+      }
+
+      //  Edit Button required
+      if (editData) {
+        tableData = {
+          ...tableData,
+          edit: {
+            id: data?.id,
+            onClick: () => {
+              setEditRenderData(tableData);
+            },
+          },
+        };
+      }
+
+      //  Delete Button required
+      if (deleteData) {
+        tableData = {
+          ...tableData,
+          delete: {
+            id: data?.id,
+            onClick: deleteTableData,
+          },
+        };
+      }
+
+      //  Accept Reject Button required
+      if (acceptRejectData) {
+        tableData = {
+          ...tableData,
+          action: {
+            id: data?.id,
+            onAccept: acceptRequest,
+            onReject: rejectRequest,
+          },
+        };
+      }
+
+      return tableData;
+    });
+
+    return answer;
+  };
+
   // Render Data API
   useEffect(() => {
     if (getAPI) {
-      const API_CALL = { ...getAPI };
-      if (params) {
+      let API_CALL = { ...getAPI };
+      let datefilter = ''
+      if (
+        (dates.startDate !== null && dates.endDate !== null) 
+      )
+      {
+       datefilter = `&startDate=${dates.startDate}&endDate=${dates.endDate}`;
       }
-      api.sendRequest(API_CALL, (res) => {
-        let API_RESPONSE_DATA = res?.data;
-        if (extraResData) {
-          API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
+      
+      // console.log(API_CALL);
+      if (searchKeyword === "") {
+        API_CALL.endpoint = API_CALL.endpoint + datefilter;
+        console.log(API_CALL);
+          api.sendRequest(API_CALL, (res) => {
+            let API_RESPONSE_DATA = res?.data;
+            if (extraResData) {
+              API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
+            }
+            const RESPONSE = tableData(API_RESPONSE_DATA);
+            // console.log(RESPONSE);
+            setRenderData(getData(RESPONSE));
+          });
+        } else {
+          api.sendRequest(
+            { type: "POST", endpoint: searchAPI },
+            (res) => {
+              setRenderData(getData(tableData(res?.data[extraResData])));
+              // console.log(res?.data?.clubs);
+            },
+            { keyword: searchKeyword }
+          );
         }
-        // console.log(API_RESPONSE_DATA);
-        setRenderData(
-          API_RESPONSE_DATA?.map((data, index) => {
-            let tableData = {
-              ...data,
-              no: index + 1,
-              image: data?.image || profile,
-              profilePic: data?.profilePic || profile,
-              time: moment(data?.time).format("HH:mm A"),
-              date: moment(data?.date).format("DD MMM ,YYYY"),
-              fullDate: `${moment(data?.startDate).format(
-                "DD MMM ,YYYY"
-              )} to ${moment(data?.endDate).format("DD MMM ,YYYY")}`,
-            };
-
-            // View Button
-            if (viewData) {
-              tableData = {
-                ...tableData,
-                view: {
-                  id: data?.id,
-                  // checked: !data?.isBlocked,
-                  onClick: renderPage,
-                },
-              };
-            }
-
-            //  Block Button required
-            if (blockData) {
-              tableData = {
-                ...tableData,
-                toggle: {
-                  id: data?.id,
-                  checked: data?.isBlocked,
-                  onClick: blockTableData,
-                },
-              };
-            }
-            //  Checkbox Button required
-            if (checkboxData) {
-              tableData = {
-                ...tableData,
-                checkbox: {
-                  id: data?.id,
-                  checked: !data?.privateAcc,
-                  onClick: () => {},
-                },
-              };
-            }
-
-            //  Edit Button required
-            if (editData) {
-              tableData = {
-                ...tableData,
-                edit: {
-                  id: data?.id,
-                  onClick: () => {
-                    setEditRenderData(tableData);
-                  },
-                },
-              };
-            }
-
-            //  Delete Button required
-            if (deleteData) {
-              tableData = {
-                ...tableData,
-                delete: {
-                  id: data?.id,
-                  onClick: deleteTableData,
-                },
-              };
-            }
-
-            //  Delete Button required
-            if (acceptRejectData) {
-              tableData = {
-                ...tableData,
-                action: {
-                  id: data?.id,
-                  onAccept: acceptRequest,
-                  onReject: rejectRequest,
-                },
-              };
-            }
-
-            return tableData;
-          })
-        );
-      });
     }
     setRenderData([]);
-  }, [refresh]);
+  }, [refresh, searchKeyword,dates]);
   return (
     <>
+      {/* Date Filter */}
+
+      {(datefilter || searchfilter) && (
+        <div className="my-5">
+          <Card>
+            <Row>
+              <Col span={24}>
+                <Heading>Filter</Heading>
+              </Col>
+              {datefilter && (
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <RangePicker
+                    className="w-3/4"
+                    onChange={dateFilterFunction}
+                  />
+                </Col>
+              )}
+
+              {searchfilter && (
+                <Col span={18} className={`${datefilter ? "mt-5" : ""}`}>
+                  <div className="w-1/2">
+                    <CustomSearchBar
+                      endpointAPI={searchAPI}
+                      setKeyword={setSearchKeyword}
+                      isSearch={isSearch}
+                    />
+                  </div>
+                </Col>
+              )}
+            </Row>
+          </Card>
+        </div>
+      )}
+
       {/* Add Modal */}
       {(addData || formData) && (
         <>
@@ -424,6 +480,8 @@ const PageComponent = ({
           title={tableTitle}
           dataSource={DUMMY_DATA ? DUMMY_DATA : renderData}
           name={tableHeaders}
+          dataBaseSearch={dataBaseSearch}
+          searchAPI={searchAPI}
         />
       )}
     </>
