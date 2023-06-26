@@ -15,10 +15,8 @@ const CustomTable = ({
   onChange,
   Other = {},
   extraclass,
-  dataBaseSearch = false,
-  searchAPI = null,
+  allSelectOption = false,
   filterparmas = false,
-  isSearch,
   filterList = [],
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -109,7 +107,7 @@ const CustomTable = ({
               </div>
             </Col>
             {filterparmas && (
-               <Col span={3}>
+              <Col span={3}>
                 <div className="">
                   <Select
                     defaultValue="Select an Option"
@@ -130,7 +128,7 @@ const CustomTable = ({
                     //   },
                     // ]}
                   >
-                    <Option value={-1}>Select All</Option>
+                    {allSelectOption && <Option  value={-1}>Select All</Option>}
                     {filterList?.map((ele) => {
                       return (
                         <Option key={ele?.id} value={ele?.id}>
@@ -142,7 +140,7 @@ const CustomTable = ({
                 </div>
               </Col>
             )}
-            <Col span={filterparmas?3:6}>
+            <Col span={filterparmas ? 3 : 6}>
               <div className="mr-5">
                 <CSVLink data={CSVData}>
                   <Button
@@ -158,7 +156,7 @@ const CustomTable = ({
               </div>
             </Col>
           </Row>
-          
+
           <Table
             rowClassName={`rows-custom ${extraclass}`}
             pagination={false}

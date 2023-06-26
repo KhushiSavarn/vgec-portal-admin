@@ -41,11 +41,12 @@ const PageComponent = ({
   extraResData = "",
   DUMMY_DATA = null,
   filterparmas = false,
+  allSelectOption = false,
+  filterList = [],
   dataBaseSearch = false,
   searchfilter = false,
   isSearch = false,
   searchAPI = null,
-  filterList = [],
   datefilter = false,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,7 +62,7 @@ const PageComponent = ({
   const api = useHttp();
   const navigate = useNavigate();
   // console.log(editRenderData);
-  console.log(dates);
+  // console.log(dates);
 
   const { RangePicker } = DatePicker;
 
@@ -359,40 +360,37 @@ const PageComponent = ({
   useEffect(() => {
     if (getAPI) {
       let API_CALL = { ...getAPI };
-      let datefilter = ''
-      if (
-        (dates.startDate !== null && dates.endDate !== null) 
-      )
-      {
-       datefilter = `&startDate=${dates.startDate}&endDate=${dates.endDate}`;
+      let datefilter = "";
+      if (dates.startDate !== null && dates.endDate !== null) {
+        datefilter = `&startDate=${dates.startDate}&endDate=${dates.endDate}`;
       }
-      
+
       // console.log(API_CALL);
       if (searchKeyword === "") {
         API_CALL.endpoint = API_CALL.endpoint + datefilter;
         console.log(API_CALL);
-          api.sendRequest(API_CALL, (res) => {
-            let API_RESPONSE_DATA = res?.data;
-            if (extraResData) {
-              API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
-            }
-            const RESPONSE = tableData(API_RESPONSE_DATA);
-            // console.log(RESPONSE);
-            setRenderData(getData(RESPONSE));
-          });
-        } else {
-          api.sendRequest(
-            { type: "POST", endpoint: searchAPI },
-            (res) => {
-              setRenderData(getData(tableData(res?.data[extraResData])));
-              // console.log(res?.data?.clubs);
-            },
-            { keyword: searchKeyword }
-          );
-        }
+        api.sendRequest(API_CALL, (res) => {
+          let API_RESPONSE_DATA = res?.data;
+          if (extraResData) {
+            API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
+          }
+          const RESPONSE = tableData(API_RESPONSE_DATA);
+          // console.log(RESPONSE);
+          setRenderData(getData(RESPONSE));
+        });
+      } else {
+        api.sendRequest(
+          { type: "POST", endpoint: searchAPI },
+          (res) => {
+            setRenderData(getData(tableData(res?.data[extraResData])));
+            // console.log(res?.data?.clubs);
+          },
+          { keyword: searchKeyword }
+        );
+      }
     }
     setRenderData([]);
-  }, [refresh, searchKeyword,dates]);
+  }, [refresh, searchKeyword, dates]);
   return (
     <>
       {/* Date Filter */}
@@ -476,12 +474,11 @@ const PageComponent = ({
           // dataSource={[]}
           // dataSource={DUMMY_DATA}
           filterparmas={filterparmas}
+          allSelectOption={allSelectOption}
           filterList={filterList}
           title={tableTitle}
           dataSource={DUMMY_DATA ? DUMMY_DATA : renderData}
           name={tableHeaders}
-          dataBaseSearch={dataBaseSearch}
-          searchAPI={searchAPI}
         />
       )}
     </>
