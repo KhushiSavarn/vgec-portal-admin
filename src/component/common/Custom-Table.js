@@ -108,27 +108,9 @@ const CustomTable = ({
                 <Search placeholder="Search" onChange={searchHandler} />
               </div>
             </Col>
-
-            <Col span={6}>
-              <div className="mr-5">
-                <CSVLink data={CSVData}>
-                  <Button
-                    className="float-right"
-                    type="primary"
-                    ghost
-                    onClick={() => {}}
-                    // {...props.ButtonDefault}
-                  >
-                    Export CSV
-                  </Button>
-                </CSVLink>
-              </div>
-            </Col>
-          </Row>
-          {filterparmas && (
-            <Row className="mb-10">
-              <Col span={24}>
-                <div className="float-right">
+            {filterparmas && (
+               <Col span={3}>
+                <div className="">
                   <Select
                     defaultValue="Select an Option"
                     onChange={(value) => {
@@ -159,8 +141,24 @@ const CustomTable = ({
                   </Select>
                 </div>
               </Col>
-            </Row>
-          )}
+            )}
+            <Col span={filterparmas?3:6}>
+              <div className="mr-5">
+                <CSVLink data={CSVData}>
+                  <Button
+                    className="float-right"
+                    type="primary"
+                    ghost
+                    onClick={() => {}}
+                    // {...props.ButtonDefault}
+                  >
+                    Export CSV
+                  </Button>
+                </CSVLink>
+              </div>
+            </Col>
+          </Row>
+          
           <Table
             rowClassName={`rows-custom ${extraclass}`}
             pagination={false}
