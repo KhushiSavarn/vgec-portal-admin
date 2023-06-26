@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Input, Pagination, Row, Select, Table } from "antd";
+import { Button, Card, Col, Input, Pagination, Row, Select, Table, TreeSelect } from "antd";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import { CSVLink } from "react-csv";
 import Search from "antd/es/transfer/search";
@@ -15,8 +15,8 @@ const CustomTable = ({
   onChange,
   Other = {},
   extraclass,
-  allSelectOption = false,
   filterparmas = false,
+
   filterList = [],
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,46 +101,38 @@ const CustomTable = ({
           className="container-body"
         >
           <Row className="mb-5">
-            <Col span={18}>
+            <Col span={16} lg={16} xl={16} xxl={17}>
               <div className="w-1/2">
                 <Search placeholder="Search" onChange={searchHandler} />
               </div>
             </Col>
             {filterparmas && (
-              <Col span={3}>
+              <Col span={4} lg={4} xl={4} xxl={3}>
                 <div className="">
-                  <Select
-                    defaultValue="Select an Option"
-                    onChange={(value) => {
-                      console.log(value);
-                    }}
+                  <TreeSelect
+                    
                     style={{
-                      width: 200,
+                      width: "100%",
                     }}
-                    // options={[
-                    //   {
-                    //     value: "jack",
-                    //     label: "Jack",
-                    //   },
-                    //   {
-                    //     value: "lucy",
-                    //     label: "Lucy",
-                    //   },
-                    // ]}
-                  >
-                    {allSelectOption && <Option  value={-1}>Select All</Option>}
-                    {filterList?.map((ele) => {
-                      return (
-                        <Option key={ele?.id} value={ele?.id}>
-                          {ele?.name || ele?.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
+                    dropdownStyle={{
+                      maxHeight: 400,
+                      overflow: "auto",
+                    }}
+                    placeholder="Please an Option"
+                    allowClear
+                    treeDefaultExpandAll
+                    onChange={()=>{}}
+                    treeData={filterList}
+                  />
                 </div>
               </Col>
             )}
-            <Col span={filterparmas ? 3 : 6}>
+            <Col
+              span={filterparmas ? 4 : 8}
+              lg={filterparmas ? 4 : 8}
+              xl={filterparmas ? 4 : 8}
+              xxl={filterparmas ? 4 : 7}
+            >
               <div className="mr-5">
                 <CSVLink data={CSVData}>
                   <Button

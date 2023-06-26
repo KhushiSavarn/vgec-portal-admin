@@ -41,9 +41,7 @@ const PageComponent = ({
   extraResData = "",
   DUMMY_DATA = null,
   filterparmas = false,
-  allSelectOption = false,
   filterList = [],
-  dataBaseSearch = false,
   searchfilter = false,
   isSearch = false,
   searchAPI = null,
@@ -368,7 +366,7 @@ const PageComponent = ({
       // console.log(API_CALL);
       if (searchKeyword === "") {
         API_CALL.endpoint = API_CALL.endpoint + datefilter;
-        console.log(API_CALL);
+        // console.log(API_CALL);
         api.sendRequest(API_CALL, (res) => {
           let API_RESPONSE_DATA = res?.data;
           if (extraResData) {
@@ -474,7 +472,6 @@ const PageComponent = ({
           // dataSource={[]}
           // dataSource={DUMMY_DATA}
           filterparmas={filterparmas}
-          allSelectOption={allSelectOption}
           filterList={filterList}
           title={tableTitle}
           dataSource={DUMMY_DATA ? DUMMY_DATA : renderData}
