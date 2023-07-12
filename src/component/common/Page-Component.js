@@ -42,6 +42,7 @@ const PageComponent = ({
   DUMMY_DATA = null,
   filterparmas = false,
   filterList = [],
+  defaultFilterOption = null,
   searchfilter = false,
   isSearch = false,
   searchAPI = null,
@@ -271,10 +272,9 @@ const PageComponent = ({
 
   // Add Requried Buttons
   const tableData = (res) => {
-    const answer = res?.map((data, index) => {
+    const answer = res?.map((data) => {
       let tableData = {
         ...data,
-        no: index + 1,
       };
 
       // View Button
@@ -313,7 +313,7 @@ const PageComponent = ({
       }
 
       //  Edit Button required
-      if (editData) {
+      if (editData || editformData) {
         tableData = {
           ...tableData,
           edit: {
@@ -450,7 +450,7 @@ const PageComponent = ({
         </>
       )}
       {/* Edit Modal */}
-      {editData && (
+      {(editData || editformData) && (
         <ModalFormCreator
           open={editRenderData !== null}
           onCreate={editTableData}
@@ -472,7 +472,8 @@ const PageComponent = ({
           // dataSource={[]}
           // dataSource={DUMMY_DATA}
           filterparmas={filterparmas}
-          filterList={filterList}
+            filterList={filterList}
+            defaultFilterOption={defaultFilterOption}
           title={tableTitle}
           dataSource={DUMMY_DATA ? DUMMY_DATA : renderData}
           name={tableHeaders}
