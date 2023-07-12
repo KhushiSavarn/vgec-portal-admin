@@ -71,9 +71,10 @@ const PageComponent = ({
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
-      CONSTANTS.FORM_FIELD.USERS_MODAL.forEach((ele) => {
+      CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
+        console.log(ele.id);
         if (ele.type !== "file" && ele.type !== "date") {
-          console.log(value[ele.id]);
+          console.log(ele.id,value[ele.id]);
           formPayload.append(ele.id, value[ele.id]);
         }
         if (ele.type === "file") {
