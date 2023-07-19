@@ -17,6 +17,7 @@ const alphanumericSort = (a, b, value) => {
   }
   return a[value] - b[value];
 };
+
 const RenderActionButtons = (value) => {
   let ButtonsArray = [];
   if (value?.Delete) {
@@ -91,11 +92,14 @@ const RenderDownloadButton = (value) => {
 const RenderEditButton = (value) => {
   const { id, onClick } = value;
   return (
-    <EditOutlined
+    <Button
+      type="primary"
       onClick={() => {
         onClick(id);
       }}
-    />
+    >
+      <EditOutlined />
+    </Button>
   );
 };
 
@@ -182,7 +186,7 @@ const ImageRanders = (value) => {
       <Image
         width={50}
         height={50}
-        className="rounded-full"
+        className="rounded-full object-cover"
         src={imageSrc}
         alt={value}
       />
@@ -199,7 +203,7 @@ const RenderToggleButton = (value) => {
         onChange={() => {
           onClick(id, checked);
         }}
-        checked={checked}
+        checked={!checked}
       />
     </div>
   );
@@ -212,7 +216,7 @@ const RenderCheckbox = (value) => {
     <div>
       <Input
         type="checkbox"
-        checked={checked}
+        checked={!checked}
         onChange={() => {
           onClick(id, checked);
         }}
