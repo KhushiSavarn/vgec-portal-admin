@@ -50,6 +50,7 @@ const AppLayout = () => {
   const api = useHttp();
   useEffect(() => {
     if (!(getAuthToken() !== undefined && getAuthToken() !== null)) {
+      navigate(loginRoot)
       return;
     }
     if (!CONSTANTS.GETMe) {
