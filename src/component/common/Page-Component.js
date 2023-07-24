@@ -67,27 +67,37 @@ const PageComponent = ({
 
   // ADD Data API
   const addTableData = (value) => {
-    console.log({ ...value });
+    // console.log({ ...value });
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
       CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
-        console.log(ele.id);
+        // console.log(ele.id);
         if (ele.type !== "file" && ele.type !== "date") {
-          console.log(ele.id,value[ele.id]);
+          // console.log(ele.id,value[ele.id]);
           formPayload.append(ele.id, value[ele.id]);
         }
         if (ele.type === "file") {
-          console.log(value[ele.id][0].originFileObj);
+          // console.log(value[ele.id][0].originFileObj);
           formPayload.append(ele.id, value[ele.id][0].originFileObj);
         }
-        if (ele.type === "date") {
-          console.log(moment(value[ele.id].$d).format("YYYY-MM-DD"));
-          formPayload.append(
-            ele.id,
-            moment(value[ele.id].$d).format("YYYY-MM-DD")
-          );
-        }
+       
+         if (ele.type === "date") {
+           if (dateTime) {
+             const dateTimeValue = `${moment(value[ele.id].$d).format(
+               "YYYY-MM-DD"
+             )} ${moment(value[ele.id].$d, "HH:mm:ss")
+               .utc()
+               .format("HH:mm:ss")}`;
+             // console.log(dateTimeValue);
+             formPayload.append(ele.id, dateTimeValue);
+           } else {
+             formPayload.append(
+               ele.id,
+               moment(value[ele.id].$d).format("YYYY-MM-DD")
+             );
+           }
+         }
       });
     } else {
       rawPayload = value;
@@ -160,7 +170,9 @@ const PageComponent = ({
           if (dateTime) {
             const dateTimeValue = `${moment(value[ele.id].$d).format(
               "YYYY-MM-DD"
-            )} ${moment(value[ele.id].$d).format("HH:mm:ss")}`;
+            )} ${moment(value[ele.id].$d, "HH:mm:ss")
+              .utc()
+              .format("HH:mm:ss")}`;
             // console.log(dateTimeValue);
             formPayload.append(ele.id, dateTimeValue);
           } else {
