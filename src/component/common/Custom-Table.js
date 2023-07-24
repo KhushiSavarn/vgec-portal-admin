@@ -156,6 +156,7 @@ const CustomTable = ({
             //   type: "checkbox",
             //   ...rowSelection,
             // }}
+            scroll={{x:800,y:1300}}
             {...Other}
             dataSource={paginatedData}
             columns={CONSTANTS.TABLE[name]}
