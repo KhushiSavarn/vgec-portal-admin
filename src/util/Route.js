@@ -242,6 +242,10 @@ const ALL_ROUTES = [
     path: "/unAuthorize",
     element: <UnAuthorize />,
   },
+  {
+    path: "*",
+    element: <Navigate to="/error" />,
+  },
 ];
 
 export default ALL_ROUTES;
