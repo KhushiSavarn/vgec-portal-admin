@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../../hooks/use-http";
-import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, DatePicker, Image, Row, Spin } from "antd";
 import CustomTable from "./Custom-Table";
 import ModalFormCreator from "./ModalFormCreator";
@@ -47,6 +46,9 @@ const PageComponent = ({
   isSearch = false,
   searchAPI = null,
   datefilter = false,
+  extraParams = "",
+  payloadExtra = {},
+  extraEndPointData = "",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -58,56 +60,87 @@ const PageComponent = ({
     startDate: null,
     endDate: null,
   });
-  const api = useHttp();
-  const navigate = useNavigate();
-  // console.log(editRenderData);
-  // console.log(dates);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(filterList[0]?.value);
 
+  const api = useHttp();
+
+  // console.log(totalRecords);
   const { RangePicker } = DatePicker;
 
   // ADD Data API
   const addTableData = (value) => {
-    // console.log({ ...value });
+    console.log({ ...value });
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
       CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
         // console.log(ele.id);
-        if (ele.type !== "file" && ele.type !== "date") {
-          // console.log(ele.id,value[ele.id]);
-          formPayload.append(ele.id, value[ele.id]);
+        if (
+          ele.type !== "file" &&
+          ele.type !== "date" &&
+          ele.type !== "multifield" &&
+          ele.type !== "extraMultiSingle"
+        ) {
+          // console.log(value[ele.id]);
+          value[ele.id] && formPayload.append(ele.id, value[ele.id]);
         }
         if (ele.type === "file") {
           // console.log(value[ele.id][0].originFileObj);
           formPayload.append(ele.id, value[ele.id][0].originFileObj);
         }
-       
-         if (ele.type === "date") {
-           if (dateTime) {
-             const dateTimeValue = `${moment(value[ele.id].$d).format(
-               "YYYY-MM-DD"
-             )} ${moment(value[ele.id].$d, "HH:mm:ss")
-               .utc()
-               .format("HH:mm:ss")}`;
-             // console.log(dateTimeValue);
-             formPayload.append(ele.id, dateTimeValue);
-           } else {
-             formPayload.append(
-               ele.id,
-               moment(value[ele.id].$d).format("YYYY-MM-DD")
-             );
-           }
-         }
+        if (ele.type === "multifield" || ele.type === "extraMultiSingle") {
+          if (ele?.handler) {
+            value[ele.id] && formPayload.append(ele.id, ele?.handler(value[ele.id]));
+          } else {
+            value[ele.id] && formPayload.append(ele.id, JSON.stringify(value[ele.id]));
+          }
+        }
+        if (ele.type === "date") {
+          if (dateTime) {
+            const dateTimeValue = `${moment(value[ele.id].$d).format(
+              "YYYY-MM-DD"
+            )} ${moment(value[ele.id].$d, "HH:mm:ss")
+              .utc()
+              .format("HH:mm:ss")}`;
+            // console.log(dateTimeValue);
+            value[ele.id] &&  formPayload.append(ele.id, dateTimeValue);
+          } else {
+            value[ele.id] &&  formPayload.append(
+              ele.id,
+              moment(value[ele.id].$d, "YYYY-MM-DD").utc().format("YYYY-MM-DD")
+            );
+          }
+        }
+      });
+      Object.entries(payloadExtra).forEach((ele) => {
+        formPayload.append(ele[0], ele[1]);
       });
     } else {
-      rawPayload = value;
+      CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
+        // console.log(ele.id);
+
+        if (ele.type === "option") {
+          const OpetionsArr = [];
+          for (let i = 1; i <= 10000000; i++) {
+            if (ele?.id + i in value) {
+              OpetionsArr.push(value[ele?.id + i]);
+              delete value[ele?.id + i];
+            } else {
+              break;
+            }
+          }
+
+          rawPayload = { ...rawPayload, options: OpetionsArr.toString() };
+        }
+      });
+      rawPayload = { ...value, ...payloadExtra, ...rawPayload };
     }
 
     const payload = formData ? formPayload : rawPayload;
 
-    // console.log(payload);
-
-    // console.log(payload);
     if (addAPI) {
       const ADD_API_CALL = { ...addAPI };
       api.sendRequest(
@@ -144,7 +177,7 @@ const PageComponent = ({
   // Edit Data API
   const editTableData = (value) => {
     let rawPayload = {};
-    console.log(value);
+    // console.log(value);
     const formPayload = new FormData();
     if (editformData) {
       CONSTANTS.FORM_FIELD[
@@ -156,11 +189,11 @@ const PageComponent = ({
           ele.type !== "number"
         ) {
           // console.log(value[ele.id]);
-          formPayload.append(ele.id, value[ele.id]);
+          value[ele.id] && formPayload.append(ele.id, value[ele.id]);
         }
         if (ele.type === "number") {
           // console.log(value[ele.id]);
-          formPayload.append(ele.id, +value[ele.id]);
+          value[ele.id] && formPayload.append(ele.id, +value[ele.id]);
         }
         if (ele.type === "file" && value[ele?.id]) {
           // console.log(value[ele.id][0].originFileObj);
@@ -174,9 +207,9 @@ const PageComponent = ({
               .utc()
               .format("HH:mm:ss")}`;
             // console.log(dateTimeValue);
-            formPayload.append(ele.id, dateTimeValue);
+            value[ele.id] && formPayload.append(ele.id, dateTimeValue);
           } else {
-            formPayload.append(
+            value[ele.id] && formPayload.append(
               ele.id,
               moment(value[ele.id].$d).format("YYYY-MM-DD")
             );
@@ -184,7 +217,24 @@ const PageComponent = ({
         }
       });
     } else {
-      rawPayload = value;
+      CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
+        // console.log(ele.id);
+
+        if (ele.type === "option") {
+          const OpetionsArr = [];
+          for (let i = 1; i <= 10000000; i++) {
+            if (ele?.id + i in value) {
+              OpetionsArr.push(value[ele?.id + i]);
+              delete value[ele?.id + i];
+            } else {
+              break;
+            }
+          }
+
+          rawPayload = { ...rawPayload, options: OpetionsArr.toString() };
+        }
+      });
+      rawPayload = { ...value, ...payloadExtra, ...rawPayload };
     }
 
     const payload = editformData ? formPayload : rawPayload;
@@ -192,7 +242,7 @@ const PageComponent = ({
     //   payload = { ...payload, isBlocked: editRenderData?.isBlocked };
     // }
     const dataId = editRenderData?.id;
-    console.log(payload);
+    // console.log(payload);
     if (editAPI) {
       const EDIT_API_CALL = apiGenerator(editAPI, {
         dataId,
@@ -236,7 +286,7 @@ const PageComponent = ({
     const payload = {
       approve: true,
     };
-    console.log(payload);
+    // console.log(payload);
     if (acceptRejectAPI) {
       const ACCEPT_API_CALL = apiGenerator(acceptRejectAPI, {
         dataId,
@@ -256,7 +306,7 @@ const PageComponent = ({
     const payload = {
       approve: false,
     };
-    console.log(payload);
+    // console.log(payload);
     if (acceptRejectAPI) {
       const REJECT_API_CALL = apiGenerator(acceptRejectAPI, {
         dataId,
@@ -274,9 +324,9 @@ const PageComponent = ({
 
   // Date Filter
   const dateFilterFunction = (e) => {
-    console.log(e);
-    console.log(dayjs(e[0]).format("YYYY-MM-DD"));
-    console.log(dayjs(e[1]).format("YYYY-MM-DD"));
+    // console.log(e);
+    // console.log(dayjs(e[0]).format("YYYY-MM-DD"));
+    // console.log(dayjs(e[1]).format("YYYY-MM-DD"));
     setDates({
       startDate: dayjs(e[0]).format("YYYY-MM-DD"),
       endDate: dayjs(e[1]).format("YYYY-MM-DD"),
@@ -296,7 +346,6 @@ const PageComponent = ({
           ...tableData,
           view: {
             id: data?.id,
-            // checked: !data?.isBlocked,
             onClick: viewFunction,
           },
         };
@@ -332,6 +381,7 @@ const PageComponent = ({
           edit: {
             id: data?.id,
             onClick: () => {
+              // console.log(tableData, "edit data");
               setEditRenderData(tableData);
             },
           },
@@ -371,29 +421,42 @@ const PageComponent = ({
   useEffect(() => {
     if (getAPI) {
       let API_CALL = { ...getAPI };
+      API_CALL.endpoint = API_CALL.endpoint + extraEndPointData
       let datefilter = "";
       if (dates.startDate !== null && dates.endDate !== null) {
-        datefilter = `&startDate=${dates.startDate}&endDate=${dates.endDate}`;
+        datefilter = `?startDate=${dates.startDate}&endDate=${dates.endDate}`;
       }
 
       // console.log(API_CALL);
       if (searchKeyword === "") {
         API_CALL.endpoint = API_CALL.endpoint + datefilter;
-        // console.log(API_CALL);
+
+        if (API_CALL.endpoint.includes("?")) {
+          API_CALL.endpoint = `${API_CALL.endpoint}&page=${pageNumber}&limit=${pageSize}`;
+        } else {
+          API_CALL.endpoint = `${API_CALL.endpoint}?page=${pageNumber}&limit=${pageSize}`;
+        }
+        // For Selected Filter
+        if (selectedOption !== "" && selectedOption !== undefined) {
+          API_CALL.endpoint = `${API_CALL.endpoint}&${selectedOption}`;
+        }
+        API_CALL.endpoint = `${API_CALL.endpoint}${extraParams}`;
         api.sendRequest(API_CALL, (res) => {
+          setTotalRecords(res?.data?.count);
           let API_RESPONSE_DATA = res?.data;
           if (extraResData) {
             API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
           }
-          const RESPONSE = tableData(API_RESPONSE_DATA);
+
+          const RESPONSE = tableData(getData(API_RESPONSE_DATA));
           // console.log(RESPONSE);
-          setRenderData(getData(RESPONSE));
+          setRenderData(RESPONSE);
         });
       } else {
         api.sendRequest(
-          { type: "POST", endpoint: searchAPI },
+          { type: "GET", endpoint: `${searchAPI}${searchKeyword}` },
           (res) => {
-            setRenderData(getData(tableData(res?.data[extraResData])));
+            setRenderData(tableData(getData(res?.data[extraResData])));
             // console.log(res?.data?.clubs);
           },
           { keyword: searchKeyword }
@@ -401,7 +464,7 @@ const PageComponent = ({
       }
     }
     setRenderData([]);
-  }, [refresh, searchKeyword, dates]);
+  }, [refresh, searchKeyword, dates, pageNumber, pageSize, selectedOption]);
   return (
     <>
       {/* Date Filter */}
@@ -472,7 +535,7 @@ const PageComponent = ({
           }}
           name={editModalTitle}
           menu={editModalFields || modalFields}
-          formData={editRenderData}
+          formData={{ ...editRenderData }}
         />
       )}
       {api.isLoading ? (
@@ -485,11 +548,18 @@ const PageComponent = ({
           // dataSource={[]}
           // dataSource={DUMMY_DATA}
           filterparmas={filterparmas}
-            filterList={filterList}
-            defaultFilterOption={defaultFilterOption}
+          filterList={filterList}
+          defaultFilterOption={defaultFilterOption}
           title={tableTitle}
           dataSource={DUMMY_DATA ? DUMMY_DATA : renderData}
           name={tableHeaders}
+          totalRecords={totalRecords}
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+          setSelectedOption={setSelectedOption}
+          selectedOption={selectedOption}
+          setPageSize={setPageSize}
+          pageSize={pageSize}
         />
       )}
     </>
