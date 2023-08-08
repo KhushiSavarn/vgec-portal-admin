@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Input, Pagination, Row, Select, Table, TreeSelect } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Table,
+  TreeSelect,
+} from "antd";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import { CSVLink } from "react-csv";
 import Search from "antd/es/transfer/search";
@@ -16,16 +26,24 @@ const CustomTable = ({
   Other = {},
   extraclass,
   filterparmas = false,
-
+  totalRecords,
+  setPageNumber,
+  pageNumber,
+  pageSize,
+  setPageSize,
+  defaultFilterOption = null,
   filterList = [],
+  setSelectedOption,
+  selectedOption,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(pageNumber);
+  const [currentPageSize, setCurrentPageSize] = useState(pageSize);
   const [userInput, setUserInput] = useState("");
   const [renderData, setRenderData] = useState([]);
+  const [pagination, setPagination] = useState([]);
   const api = useHttp();
 
-  // console.log(dataSource?.length);
+  // console.log(pagination);
 
   // Set Number of Pages
   const handleChangePage = (page, pageSize) => {
@@ -38,8 +56,15 @@ const CustomTable = ({
     // } else {
     // console.log("enter herr");
     setCurrentPage(page);
+    setPageNumber(page);
     setCurrentPageSize(pageSize);
+    setPageSize(pageSize);
     // }
+  };
+
+  const filterHandler = (value) => {
+    // console.log(value);
+    setSelectedOption(value);
   };
 
   // Search Filter
@@ -52,6 +77,20 @@ const CustomTable = ({
   const searchHandler = (e) => {
     // console.log(e.target.value.toLowerCase());
     setUserInput(e.target.value.toLowerCase());
+    setPagination(
+      renderData
+        ?.filter(
+          (ele) =>
+            userInput.trim() === "" ||
+            JSON.stringify(ele)
+              ?.toLowerCase()
+              ?.includes(e.target.value.toLowerCase())
+        )
+        ?.slice(
+          (currentPage - 1) * currentPageSize,
+          currentPage * currentPageSize
+        )
+    );
   };
 
   // const dataBaseSearchHandler = (e) => {
@@ -86,13 +125,13 @@ const CustomTable = ({
   useEffect(() => {
     if (dataSource.length !== 0) {
       setRenderData(dataSource);
+      setPagination(dataSource);
     }
-  }, []);
+  }, [dataSource, pageNumber,pageSize]);
 
   return (
     <Row className="my-5">
       <Card className="w-full">
-        <Heading>{title}</Heading>
         <Col
           span={24}
           style={{
@@ -102,15 +141,12 @@ const CustomTable = ({
         >
           <Row className="mb-5">
             <Col span={16} lg={16} xl={16} xxl={17}>
-              <div className="w-1/2">
-                <Search placeholder="Search" onChange={searchHandler} />
-              </div>
+              <Heading>{title}</Heading>
             </Col>
             {filterparmas && (
               <Col span={4} lg={4} xl={4} xxl={3}>
                 <div className="">
                   <TreeSelect
-                    
                     style={{
                       width: "100%",
                     }}
@@ -118,10 +154,12 @@ const CustomTable = ({
                       maxHeight: 400,
                       overflow: "auto",
                     }}
+                    // defaultValue={defaultFilterOption}
+                    value={selectedOption}
                     placeholder="Please an Option"
                     allowClear
                     treeDefaultExpandAll
-                    onChange={()=>{}}
+                    onChange={filterHandler}
                     treeData={filterList}
                   />
                 </div>
@@ -133,7 +171,7 @@ const CustomTable = ({
               xl={filterparmas ? 4 : 8}
               xxl={filterparmas ? 4 : 7}
             >
-              <div className="mr-5">
+              {/* <div className="mr-5">
                 <CSVLink data={CSVData}>
                   <Button
                     className="float-right"
@@ -145,7 +183,7 @@ const CustomTable = ({
                     Export CSV
                   </Button>
                 </CSVLink>
-              </div>
+              </div> */}
             </Col>
           </Row>
 
@@ -156,16 +194,18 @@ const CustomTable = ({
             //   type: "checkbox",
             //   ...rowSelection,
             // }}
-            scroll={{x:800,y:1300}}
+
+            scroll={{ x: 800, y: 1300 }}
             {...Other}
-            dataSource={paginatedData}
+            dataSource={pagination}
             columns={CONSTANTS.TABLE[name]}
           />
         </Col>
         <Pagination
-          current={currentPage}
-          defaultPageSize={currentPageSize}
-          total={filterData?.length}
+          current={pageNumber}
+          pageSize={pageSize}
+          total={totalRecords}
+          showSizeChanger
           onChange={handleChangePage}
           className="mt-16"
         />
