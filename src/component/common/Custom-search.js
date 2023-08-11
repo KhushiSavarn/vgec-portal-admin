@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AutoComplete } from "antd";
+import { AutoComplete, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import useHttp from "../../hooks/use-http";
 const CustomSearchBar = ({
@@ -75,7 +75,6 @@ const CustomSearchBar = ({
   return (
     <>
       <AutoComplete
-        placeholder="Search"
         className="z-40"
         // options={suggestions?.map((item) => ({
         //   value: getNestedValue(item, onBaseSearch),
@@ -83,11 +82,16 @@ const CustomSearchBar = ({
         // onSelect={handleSelect}
         onChange={handleSearchChange}
         onClick={() => {
-          console.log("object");
+          // console.log("object");
         }}
         value={searchKeyword}
         style={{ width: "100%" }}
-      ></AutoComplete>
+      >
+        <Input
+          placeholder="Search..."
+          prefix={<SearchOutlined className="text-gray-500" />}
+        />
+      </AutoComplete>
     </>
   );
 };

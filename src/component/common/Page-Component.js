@@ -49,6 +49,7 @@ const PageComponent = ({
   extraParams = "",
   payloadExtra = {},
   extraEndPointData = "",
+  exportData = {}
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -82,7 +83,10 @@ const PageComponent = ({
           ele.type !== "file" &&
           ele.type !== "date" &&
           ele.type !== "multifield" &&
-          ele.type !== "extraMultiSingle"
+          ele.type !== "extraMultiSingle" &&
+          ele.type !== "number" &&
+          ele.type !== 'switch'
+
         ) {
           // console.log(value[ele.id]);
           value[ele.id] && formPayload.append(ele.id, value[ele.id]);
@@ -98,6 +102,14 @@ const PageComponent = ({
             value[ele.id] && formPayload.append(ele.id, JSON.stringify(value[ele.id]));
           }
         }
+        if (ele.type === "switch") {
+          // console.log(value[ele.id]);
+          formPayload.append(ele.id, value[ele.id]);
+        }
+        if (ele.type === "number") {
+          // console.log(value[ele.id]);
+          value[ele.id] && formPayload.append(ele.id, +value[ele.id]);
+        }
         if (ele.type === "date") {
           if (dateTime) {
             const dateTimeValue = `${moment(value[ele.id].$d).format(
@@ -106,9 +118,9 @@ const PageComponent = ({
               .utc()
               .format("HH:mm:ss")}`;
             // console.log(dateTimeValue);
-            value[ele.id] &&  formPayload.append(ele.id, dateTimeValue);
+            value[ele.id] && formPayload.append(ele.id, dateTimeValue);
           } else {
-            value[ele.id] &&  formPayload.append(
+            value[ele.id] && formPayload.append(
               ele.id,
               moment(value[ele.id].$d, "YYYY-MM-DD").utc().format("YYYY-MM-DD")
             );
@@ -186,10 +198,17 @@ const PageComponent = ({
         if (
           ele.type !== "file" &&
           ele.type !== "date" &&
-          ele.type !== "number"
+          ele.type !== "number" && ele.type !== "multifield" &&
+          ele.type !== "extraMultiSingle" &&
+          ele.type !== 'switch'
+
         ) {
           // console.log(value[ele.id]);
           value[ele.id] && formPayload.append(ele.id, value[ele.id]);
+        }
+        if (ele.type === "switch") {
+          // console.log(value[ele.id]);
+          formPayload.append(ele.id, value[ele.id]);
         }
         if (ele.type === "number") {
           // console.log(value[ele.id]);
@@ -198,6 +217,13 @@ const PageComponent = ({
         if (ele.type === "file" && value[ele?.id]) {
           // console.log(value[ele.id][0].originFileObj);
           formPayload.append(ele.id, value[ele?.id][0]?.originFileObj);
+        }
+        if (ele.type === "multifield" || ele.type === "extraMultiSingle") {
+          if (ele?.handler) {
+            value[ele.id] && formPayload.append(ele.id, ele?.handler(value[ele.id]));
+          } else {
+            value[ele.id] && formPayload.append(ele.id, JSON.stringify(value[ele.id]));
+          }
         }
         if (ele.type === "date") {
           if (dateTime) {
@@ -369,7 +395,7 @@ const PageComponent = ({
           checkbox: {
             id: data?.id,
             checked: !data?.privateAcc,
-            onClick: () => {},
+            onClick: () => { },
           },
         };
       }
@@ -442,7 +468,7 @@ const PageComponent = ({
         }
         API_CALL.endpoint = `${API_CALL.endpoint}${extraParams}`;
         api.sendRequest(API_CALL, (res) => {
-          setTotalRecords(res?.data?.count);
+          setTotalRecords(res?.totalRecords);
           let API_RESPONSE_DATA = res?.data;
           if (extraResData) {
             API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
@@ -454,9 +480,9 @@ const PageComponent = ({
         });
       } else {
         api.sendRequest(
-          { type: "GET", endpoint: `${searchAPI}${searchKeyword}` },
+          { type: "POST", endpoint: searchAPI },
           (res) => {
-            setRenderData(tableData(getData(res?.data[extraResData])));
+            setRenderData(getData(tableData(res?.data[extraResData])));
             // console.log(res?.data?.clubs);
           },
           { keyword: searchKeyword }
@@ -559,7 +585,8 @@ const PageComponent = ({
           setSelectedOption={setSelectedOption}
           selectedOption={selectedOption}
           setPageSize={setPageSize}
-          pageSize={pageSize}
+            pageSize={pageSize}
+            exportData={exportData}
         />
       )}
     </>

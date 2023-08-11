@@ -31,10 +31,10 @@ const CustomTable = ({
   pageNumber,
   pageSize,
   setPageSize,
-  defaultFilterOption = null,
   filterList = [],
   setSelectedOption,
   selectedOption,
+  exportData
 }) => {
   const [currentPage, setCurrentPage] = useState(pageNumber);
   const [currentPageSize, setCurrentPageSize] = useState(pageSize);
@@ -47,14 +47,7 @@ const CustomTable = ({
 
   // Set Number of Pages
   const handleChangePage = (page, pageSize) => {
-    // console.log(page);
-    // console.log(pageSize);
-    // if (pageSize !== 10 && page !== 1) {
-    //   setCurrentPage(1);
-    //   setCurrentPageSize(pageSize);
-    //   // console.log(currentPage);
-    // } else {
-    // console.log("enter herr");
+ 
     setCurrentPage(page);
     setPageNumber(page);
     setCurrentPageSize(pageSize);
@@ -116,18 +109,37 @@ const CustomTable = ({
     }),
   };
 
-  const CSVData = [];
-  CSVData[0] = CONSTANTS.TABLE[name]?.map((el) => el.title);
-  renderData?.map((item, index) => {
-    CSVData[index + 1] = CONSTANTS.TABLE[name]?.map((el) => item[el.dataIndex]);
-    return 0;
-  });
+  const isDataEmpty = dataSource?.length <= 0;
+  let CSVData = [];
+
+  if (exportData?.length) {
+    if (!isDataEmpty) {
+      CSVData[0] = exportData?.map((el) => el[1]);
+      renderData?.map((item, index) => {
+        CSVData[index + 1] = exportData
+          ?.map((el) => el[0])
+          ?.map((val) => {
+            if (item != null && val in item) return item[val];
+            return "";
+          });
+        return 0;
+      });
+    }
+  } else {
+    CSVData[0] = CONSTANTS.TABLE[name]?.map((el) => el.title);
+    renderData?.map((item, index) => {
+      CSVData[index + 1] = CONSTANTS.TABLE[name]?.map(
+        (el) => item[el.dataIndex]
+      );
+      return 0;
+    });
+  };
   useEffect(() => {
     if (dataSource.length !== 0) {
       setRenderData(dataSource);
       setPagination(dataSource);
     }
-  }, [dataSource, pageNumber,pageSize]);
+  }, [dataSource, pageNumber, pageSize]);
 
   return (
     <Row className="my-5">
@@ -151,13 +163,12 @@ const CustomTable = ({
                       width: "100%",
                     }}
                     dropdownStyle={{
-                      maxHeight: 400,
                       overflow: "auto",
                     }}
+                    allowClear
                     // defaultValue={defaultFilterOption}
                     value={selectedOption}
                     placeholder="Please an Option"
-                    allowClear
                     treeDefaultExpandAll
                     onChange={filterHandler}
                     treeData={filterList}
@@ -171,8 +182,8 @@ const CustomTable = ({
               xl={filterparmas ? 4 : 8}
               xxl={filterparmas ? 4 : 7}
             >
-              {/* <div className="mr-5">
-                <CSVLink data={CSVData}>
+              <div className="mr-5">
+              <CSVLink filename={`${title} Table.csv`} data={CSVData}>
                   <Button
                     className="float-right"
                     type="primary"
@@ -183,7 +194,7 @@ const CustomTable = ({
                     Export CSV
                   </Button>
                 </CSVLink>
-              </div> */}
+              </div>
             </Col>
           </Row>
 
