@@ -348,16 +348,27 @@ const PageComponent = ({
     }
   };
 
+  
   // Date Filter
   const dateFilterFunction = (e) => {
-    // console.log(e);
+    console.log(e);
     // console.log(dayjs(e[0]).format("YYYY-MM-DD"));
     // console.log(dayjs(e[1]).format("YYYY-MM-DD"));
-    setDates({
-      startDate: dayjs(e[0]).format("YYYY-MM-DD"),
-      endDate: dayjs(e[1]).format("YYYY-MM-DD"),
-    });
-  };
+    if (e) {
+      setDates({
+        startDate: dayjs(e[0])?.format("YYYY-MM-DD"),
+        endDate: dayjs(e[1])?.format("YYYY-MM-DD"),
+      });
+    }
+    else {
+      setDates({
+        startDate: null,
+        endDate: null,
+      });
+    }
+
+
+  };;
 
   // Add Requried Buttons
   const tableData = (res) => {
