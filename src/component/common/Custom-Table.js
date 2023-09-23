@@ -164,6 +164,7 @@ const CustomTable = ({
                     }}
                     dropdownStyle={{
                       overflow: "auto",
+                      maxHeight: 400,
                     }}
                     allowClear
                     // defaultValue={defaultFilterOption}

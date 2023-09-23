@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import FormList from "antd/es/form/FormList";
 import TextEditor from "./Text-Editor";
 import Heading from "./Heading";
+import moment from "moment";
 const FormFields = ({
   changedFields = {},
   formData = {},
@@ -71,7 +72,7 @@ const FormFields = ({
             ]}
           >
             <DatePicker
-              showTime={{ format: data?.showTime }}
+              showTime={data?.showTime ? { format: data?.showTime } : false}
               disabled={data?.disabled && formData[data?.name]}
               format={data?.format}
               // disabledDate={(current) => current.isAfter(moment())}
@@ -85,8 +86,8 @@ const FormFields = ({
       case "time":
         return (
           <Form.Item
-            name={data.name}
-            id={data.id}
+            name={data?.name}
+            id={data?.id}
             className="form mt-2"
             // initialValue={
             //   data?.defaultValue
@@ -97,7 +98,7 @@ const FormFields = ({
               {
                 type: "object",
                 required: data?.required,
-                message: "Please select date!",
+                message: "Please select time!",
               },
               data.rule && data.rule,
             ]}
@@ -160,6 +161,16 @@ const FormFields = ({
                 showSearch
                 mode={data?.mode}
                 placeholder={data.placeholder ? data.placeholder : ""}
+                filterOption={(inputValue, option) => {
+                  const value = option?.children?.props?.children[0]?.props
+                    ?.children
+                    ? `${option?.children?.props?.children[0]?.props?.children}`
+                    : `${option?.children}`;
+                  return value
+                    ?.toLowerCase()
+                    ?.includes(inputValue?.toLowerCase());
+                }}
+                allowClear // Allow clearing the selected value
               >
                 {data.option &&
                   data.option.length > 0 &&
@@ -407,7 +418,7 @@ const FormFields = ({
         return (
           <Row>
             <Col span={12}>
-              <Form.Item id={data?.id} name={data?.name} >
+              <Form.Item id={data?.id} initialValue={false} name={data?.name} >
                 <Switch
                   className="mt-2"
                   defaultChecked={(formData && formData[data.name]) || false}
@@ -588,65 +599,65 @@ const FormFields = ({
       case "multifield":
         return (
           <div className="ml-2">
-            
-          <FormList
-            name={data?.name}
-            id={data?.id}
-            
-            initialValue={data?.initialValue}
-            // initialValue={[
-            //   {
-            //     title: "t 1",
-            //     shortDescription: "sd 1",
-            //     description: "d 1",
-            //     languageId: 2,
-            //   },
-            //   {
-            //     title: "t 3",
-            //     shortDescription: "sd 3",
-            //     description: "d 3",
-            //     languageId: 3,
-            //   },
-            //   {
-            //     title: "t 4",
-            //     shortDescription: "sd 4",
-            //     description: "d4",
-            //     languageId: 4,
-            //   },
-            // ]}
-            required={data?.required}
+
+            <FormList
+              name={data?.name}
+              id={data?.id}
+
+              initialValue={data?.initialValue}
+              // initialValue={[
+              //   {
+              //     title: "t 1",
+              //     shortDescription: "sd 1",
+              //     description: "d 1",
+              //     languageId: 2,
+              //   },
+              //   {
+              //     title: "t 3",
+              //     shortDescription: "sd 3",
+              //     description: "d 3",
+              //     languageId: 3,
+              //   },
+              //   {
+              //     title: "t 4",
+              //     shortDescription: "sd 4",
+              //     description: "d4",
+              //     languageId: 4,
+              //   },
+              // ]}
+              required={data?.required}
             >
-            {(fields, { add, remove }) => (
+              {(fields, { add, remove }) => (
                 <>
-                  
-                {fields.map((field, index) => (
-                  <>
-                    <Heading>{data?.menuLabel}</Heading>
-                    {CONSTANTS.FORM_FIELD[data?.menu].map((dataField) =>
-                      <>
-                        
-                        <Label required={dataField.required}>{dataField.Label}</Label>
-{            getInputFormate({
-                        ...dataField,
-                        name: [field.name, dataField.name],
-                        id: [field.id, dataField.id],
-                        key: field.key,
-                        
-                      })}
+
+                  {fields.map((field, index) => (
+                    <>
+                      <Heading>{data?.menuLabel}</Heading>
+                      {CONSTANTS.FORM_FIELD[data?.menu].map((dataField) =>
+                        <>
+
+                          <Label required={dataField.required}>{dataField.Label}</Label>
+                          {getInputFormate({
+                            ...dataField,
+                            name: [field.name, dataField.name],
+                            id: [field.id, dataField.id],
+                            key: field.key,
+
+                          })}
                         </>
-                    )}
-                    <Form.Item key={field.key}>
-                      <Button onClick={() => remove(field.name)}>
-                        {data?.removeName || "Remove Field"}
-                      </Button>
-                    </Form.Item>
-                  </>
-                ))}
-                <Button className="-mt-2" onClick={() => add()}>
-                  {data?.addName || "Add Field"}
-                </Button>
-              </>
-            )}
+                      )}
+                      <Form.Item key={field.key}>
+                        <Button onClick={() => remove(field.name)}>
+                          {data?.removeName || "Remove Field"}
+                        </Button>
+                      </Form.Item>
+                    </>
+                  ))}
+                  <Button className="-mt-2" onClick={() => add()}>
+                    {data?.addName || "Add Field"}
+                  </Button>
+                </>
+              )}
             </FormList>
           </div>
         );
@@ -698,6 +709,9 @@ const FormFields = ({
         });
         Fields.filter((el) => el?.type === "date").forEach((el) => {
           formData[el.name] = dayjs(formData[el.name]);
+        });
+        Fields.filter((el) => el?.type === "time").forEach((el) => {
+          formData[el.name] = dayjs(formData[el.name], 'HH:mm:ss');
         });
 
         Fields.filter(

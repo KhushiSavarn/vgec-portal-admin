@@ -4,8 +4,9 @@ import { Button, Card, Col, DatePicker, Image, Row, Spin } from "antd";
 import CustomTable from "./Custom-Table";
 import ModalFormCreator from "./ModalFormCreator";
 import { apiGenerator } from "../../util/functions";
-
-import profile from "../../asset/image/image 2.png";
+import {
+  BellOutlined
+} from "@ant-design/icons";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import moment from "moment";
 import dayjs from "dayjs";
@@ -49,6 +50,7 @@ const PageComponent = ({
   extraParams = "",
   payloadExtra = {},
   extraEndPointData = "",
+  getNotify = null,
   exportData = {}
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,12 +70,13 @@ const PageComponent = ({
 
   const api = useHttp();
 
-  // console.log(totalRecords);
+  // console.log(editRenderData);
   const { RangePicker } = DatePicker;
 
   // ADD Data API
   const addTableData = (value) => {
-    console.log({ ...value });
+    // console.log({ ...value });
+    // console.log(value);
     let rawPayload = {};
     const formPayload = new FormData();
     if (formData) {
@@ -133,6 +136,7 @@ const PageComponent = ({
     } else {
       CONSTANTS.FORM_FIELD[modalFields].forEach((ele) => {
         // console.log(ele.id);
+        // console.log(ele.type);
 
         if (ele.type === "option") {
           const OpetionsArr = [];
@@ -145,13 +149,33 @@ const PageComponent = ({
             }
           }
 
-          rawPayload = { ...rawPayload, options: OpetionsArr.toString() };
+
+
+          rawPayload = { ...rawPayload, options: OpetionsArr };
+        }
+        if (ele?.type === 'date') {
+          rawPayload = { ...rawPayload, date: moment(value[ele?.id]?.$d, "YYYY-MM-DD").format("YYYY-MM-DD") };
+
+        }
+        if (ele?.type === 'time') {
+          rawPayload = { ...rawPayload, time: moment(value[ele?.id]?.$d, "HH:mm:ss").format("HH:mm:ss") };
+
+        }
+        if (ele?.type === 'select' && ele?.id === 'answers') {
+          rawPayload = {
+            ...rawPayload,
+            answer: rawPayload?.options[value?.answers]
+          }
+          delete value?.answers
+          // console.log(rawPayload);
         }
       });
       rawPayload = { ...value, ...payloadExtra, ...rawPayload };
     }
 
     const payload = formData ? formPayload : rawPayload;
+    // console.log(rawPayload, 'raw');
+    // console.log(payload, 'adf');
 
     if (addAPI) {
       const ADD_API_CALL = { ...addAPI };
@@ -257,7 +281,23 @@ const PageComponent = ({
             }
           }
 
-          rawPayload = { ...rawPayload, options: OpetionsArr.toString() };
+          rawPayload = { ...rawPayload, options: OpetionsArr };
+        }
+        if (ele?.type === 'date') {
+          rawPayload = { ...rawPayload, date: moment(value[ele?.id]?.$d, "YYYY-MM-DD").format("YYYY-MM-DD") };
+
+        }
+        if (ele?.type === 'time') {
+          rawPayload = { ...rawPayload, time: moment(value[ele?.id]?.$d, "HH:mm:ss").format("HH:mm:ss") };
+
+        }
+        if (ele?.type === 'select' && ele?.id === 'answers') {
+          rawPayload = {
+            ...rawPayload,
+            answer: rawPayload?.options[value?.answers]
+          }
+          delete value?.answers
+          // console.log(rawPayload);
         }
       });
       rawPayload = { ...value, ...payloadExtra, ...rawPayload };
@@ -348,7 +388,6 @@ const PageComponent = ({
     }
   };
 
-  
   // Date Filter
   const dateFilterFunction = (e) => {
     console.log(e);
@@ -366,9 +405,7 @@ const PageComponent = ({
         endDate: null,
       });
     }
-
-
-  };;
+  };
 
   // Add Requried Buttons
   const tableData = (res) => {
@@ -479,7 +516,7 @@ const PageComponent = ({
         }
         API_CALL.endpoint = `${API_CALL.endpoint}${extraParams}`;
         api.sendRequest(API_CALL, (res) => {
-          setTotalRecords(res?.totalRecords);
+          setTotalRecords(res?.data?.count);
           let API_RESPONSE_DATA = res?.data;
           if (extraResData) {
             API_RESPONSE_DATA = API_RESPONSE_DATA[extraResData];
@@ -491,9 +528,9 @@ const PageComponent = ({
         });
       } else {
         api.sendRequest(
-          { type: "POST", endpoint: searchAPI },
+          { type: "GET", endpoint: `${searchAPI}${searchKeyword}` },
           (res) => {
-            setRenderData(getData(tableData(res?.data[extraResData])));
+            setRenderData(tableData(getData(res?.data[extraResData])));
             // console.log(res?.data?.clubs);
           },
           { keyword: searchKeyword }
@@ -523,15 +560,31 @@ const PageComponent = ({
               )}
 
               {searchfilter && (
-                <Col span={18} className={`${datefilter ? "mt-5" : ""}`}>
-                  <div className="w-1/2">
-                    <CustomSearchBar
-                      endpointAPI={searchAPI}
-                      setKeyword={setSearchKeyword}
-                      isSearch={isSearch}
-                    />
-                  </div>
+                <Col span={24} className={`${datefilter ? "mt-5" : ""}`}>
+                  <Row gutter={[32, 16]}>
+                    <Col span={16}>
+                      <div className="w-2/3">
+                        <CustomSearchBar
+                          endpointAPI={searchAPI}
+                          setKeyword={setSearchKeyword}
+                          isSearch={isSearch}
+                        />
+
+                      </div>
+                    </Col>
+                    {getNotify && <Col span={8}>
+                      <Button
+                        type="primary"
+                        onClick={getNotify}
+                        className="float-right"
+                      >
+                        <BellOutlined /> Notify All
+                      </Button>
+                    </Col>}
+                  </Row>
                 </Col>
+
+
               )}
             </Row>
           </Card>
@@ -596,8 +649,8 @@ const PageComponent = ({
           setSelectedOption={setSelectedOption}
           selectedOption={selectedOption}
           setPageSize={setPageSize}
-            pageSize={pageSize}
-            exportData={exportData}
+          pageSize={pageSize}
+          exportData={exportData}
         />
       )}
     </>
