@@ -251,6 +251,22 @@ const CRUDComponent = (props) => {
           SubmitName={"Update "}
         />
       )}
+      {CREATE && CREATE?.API && (
+        <Row
+          style={{
+            marginBlock: "15px",
+          }}
+        >
+          <Button
+            loading={API.isLoading}
+            onClick={() => {
+              setCreateOpen(true);
+            }}
+          >
+            Add
+          </Button>
+        </Row>
+      )}
       {GET?.column?.length && (
         <>
           <Col
