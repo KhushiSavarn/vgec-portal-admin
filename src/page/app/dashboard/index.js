@@ -8,26 +8,13 @@ import Logo from "../../../asset/image/image-Dashboard.png";
 import CONSTANTS from "../../../util/constant/CONSTANTS";
 import useHttp from "../../../hooks/use-http";
 import dayjs from "dayjs";
+import CRUDComponent from "../../../component/common/CRUD-Component";
 const Dashboard = () => {
   const Me = CONSTANTS.GETMe;
   const [clients, setClients] = useState([]);
   const API = useHttp();
   const { RangePicker } = DatePicker;
 
-  // useEffect(() => {
-  //   API.sendRequest(CONSTANTS.API.getAllClients, (res) => {
-  //     console.log(res?.rows);
-  //     setClients(
-  //       res?.data?.rows?.map((el) => ({
-  //         ...el,
-  //         value: el.plantCapacity,
-  //         // name: "Anupam Rasayan",
-  //         // value: 1.2,
-  //         image: Logo,
-  //       }))
-  //     );
-  //   });
-  // }, []);
   return (
     // <div className="px50 py30">
     //   <Row>
@@ -148,73 +135,103 @@ const Dashboard = () => {
     //     </Row>
     //   </div>
     // </div>
-    <div className="px50 py30">
-      <div className="my-5">
-        <Row>
-          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Card>
-              <p className="font-medium pb-5">Date Range</p>
-              <RangePicker
-                className="w-3/4"
-                onChange={(e) => {
-                  console.log(e);
-                  console.log(dayjs().format("DD/MM/YYYY"));
-                }}
-              />
-            </Card>
-          </Col>
-        </Row>
-      </div>
+    // <div className="px50 py30">
+    //   <div className="my-5">
+    //     <Row>
+    //       <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+    //         <Card>
+    //           <p className="font-medium pb-5">Date Range</p>
+    //           <RangePicker
+    //             className="w-3/4"
+    //             onChange={(e) => {
+    //               console.log(e);
+    //               console.log(dayjs().format("DD/MM/YYYY"));
+    //             }}
+    //           />
+    //         </Card>
+    //       </Col>
+    //     </Row>
+    //   </div>
 
-      <Row gutter={[16, 16]}>
-        <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
-          <Card size="small" className="p-5">
-            <div>
-              <p className="font-semibold text-lg text-slate-400">Total User</p>
-              <p className="text-xl font-medium">12</p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
-          <Card size="small" className="p-5">
-            <div>
-              <p className="font-semibold text-lg text-slate-400">Total Club</p>
-              <p className="text-xl font-medium">12</p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
-          <Card size="small" className="p-5">
-            <div>
-              <p className="font-semibold text-lg text-slate-400">
-                Total Bouncer
-              </p>
-              <p className="text-xl font-medium">150</p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
-          <Card size="small" className="p-5">
-            <div>
-              <p className="font-semibold text-lg text-slate-400">
-                Total Valet
-              </p>
-              <p className="text-xl font-medium">150</p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
-          <Card size="small" className="p-5">
-            <div>
-              <p className="font-semibold text-lg text-slate-400">
-                Total Event
-              </p>
-              <p className="text-xl font-medium">15</p>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+    //   <Row gutter={[16, 16]}>
+    //     <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
+    //       <Card size="small" className="p-5">
+    //         <div>
+    //           <p className="font-semibold text-lg text-slate-400">Total User</p>
+    //           <p className="text-xl font-medium">12</p>
+    //         </div>
+    //       </Card>
+    //     </Col>
+    //     <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
+    //       <Card size="small" className="p-5">
+    //         <div>
+    //           <p className="font-semibold text-lg text-slate-400">Total Club</p>
+    //           <p className="text-xl font-medium">12</p>
+    //         </div>
+    //       </Card>
+    //     </Col>
+    //     <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
+    //       <Card size="small" className="p-5">
+    //         <div>
+    //           <p className="font-semibold text-lg text-slate-400">
+    //             Total Bouncer
+    //           </p>
+    //           <p className="text-xl font-medium">150</p>
+    //         </div>
+    //       </Card>
+    //     </Col>
+    //     <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
+    //       <Card size="small" className="p-5">
+    //         <div>
+    //           <p className="font-semibold text-lg text-slate-400">
+    //             Total Valet
+    //           </p>
+    //           <p className="text-xl font-medium">150</p>
+    //         </div>
+    //       </Card>
+    //     </Col>
+    //     <Col span={8} xs={24} sm={12} md={8} lg={8} xl={8}>
+    //       <Card size="small" className="p-5">
+    //         <div>
+    //           <p className="font-semibold text-lg text-slate-400">
+    //             Total Event
+    //           </p>
+    //           <p className="text-xl font-medium">15</p>
+    //         </div>
+    //       </Card>
+    //     </Col>
+    //   </Row>
+    <Row>
+      <CRUDComponent
+        GET={{
+          API: CONSTANTS.API.Technology.getAll,
+          DataModifier: (res) => {
+            console.log(res, "GET ALL ABCD");
+            return res;
+          },
+          column: CONSTANTS.TABLE.TECHNOLOGY,
+        }}
+        UPDATE={{
+          API: CONSTANTS.API.Technology.update,
+          message: "Updated Technology successfully",
+          modaltitle: "Update Technology",
+          modalFields: CONSTANTS.FORM_FIELD.TECHNOLOGY_MODAL,
+          payloadModifier: (res) => res,
+        }}
+        CREATE={{
+          API: CONSTANTS.API.Technology.craete,
+          message: "Craeyed Technology successfully",
+          modaltitle: "add Technology",
+          modalFields: CONSTANTS.FORM_FIELD.TECHNOLOGY_MODAL,
+          payloadModifier: (res) => res,
+        }}
+        DELETE={{
+          API: CONSTANTS.API.Technology.delete,
+          message: "Dleted Successfully",
+        }}
+      />
+    </Row>
+    // </div>
   );
 };
 

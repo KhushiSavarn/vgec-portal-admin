@@ -858,6 +858,23 @@ const CONSTANTS = {
       },
       { dataIndex: "multButton", render: RenderActionButtons },
     ],
+    TECHNOLOGY: [
+      {
+        title: "SN No.",
+        dataIndex: "no",
+        sorter: (a, b) => alphanumericSort(a, b, "no"),
+      },
+      {
+        title: " NAME",
+        dataIndex: "name",
+        sorter: (a, b) => alphanumericSort(a, b, "name"),
+      },
+      {
+        title: "Price",
+        dataIndex: "price",
+        sorter: (a, b) => alphanumericSort(a, b, "price"),
+      },
+    ],
     SETTING_CATEGORY_TABLE: [
       {
         title: "SN No.",
@@ -1218,6 +1235,7 @@ const CONSTANTS = {
         type: "text",
         placeholder: "Enter Your Name",
         required: true,
+        labelwidth: 5,
       },
 
       {
@@ -1228,7 +1246,8 @@ const CONSTANTS = {
         type: "mobile",
         placeholder: "Enter Mobile Number",
         required: true,
-        // width: 24,
+        labelwidth: 5,
+        // width: 20,
       },
       {
         no: 3,
@@ -1237,7 +1256,9 @@ const CONSTANTS = {
         id: "user",
         type: "text",
         placeholder: "Enter User Name",
-        required: true,
+        // required: true,
+        labelwidth: 8,
+        width: 8,
       },
 
       {
@@ -1248,6 +1269,8 @@ const CONSTANTS = {
         type: "date",
         placeholder: "Enter Date of Birth",
         required: true,
+        labelwidth: 8,
+        width: 8,
       },
       {
         no: 5,
@@ -1256,6 +1279,28 @@ const CONSTANTS = {
         id: "profilePic",
         type: "file",
         placeholder: " ",
+        required: true,
+        labelwidth: 8,
+        width: 8,
+      },
+    ],
+    TECHNOLOGY_MODAL: [
+      {
+        no: 1,
+        Label: "Name",
+        name: "name",
+        id: "name",
+        type: "text",
+        placeholder: "Enter Your Name",
+        required: true,
+      },
+      {
+        no: 1,
+        Label: "Price",
+        name: "price",
+        id: "price",
+        type: "number",
+        placeholder: "Enter Your price",
         required: true,
       },
     ],
@@ -1286,12 +1331,12 @@ const CONSTANTS = {
   API: {
     login: {
       type: "POST",
-      endpoint: "/admins/login",
+      endpoint: "/login",
     },
     signUp: { type: "POST", endpoint: "/user/signup" },
     getMe: {
       type: "GET",
-      endpoint: "/admins/my/profile",
+      endpoint: "/profile",
     },
     getClubRequest: {
       type: "GET",
@@ -1317,361 +1362,31 @@ const CONSTANTS = {
       type: "DELETE",
       endpoint: "/admins/users/id/:dataId",
     },
+    Technology: {
+      getAll: {
+        type: "GET",
+        endpoint: "/technology",
+      },
+      craete: {
+        type: "POST",
+        endpoint: "/technology",
+      },
+      update: {
+        type: "PATCH",
+        endpoint: "/technology/",
+      },
+      delete: {
+        type: "DELETE",
+        endpoint: "/technology/",
+      },
+      getOne: {
+        type: "GET",
+        endpoint: "/technology/",
+      },
+    },
     //   driver: {
     //     type: "GET",
     //     endpoint: "/driver",
-    //   },
-    //   employee: {
-    //     type: "GET",
-    //     endpoint: "/employee",
-    //   },
-    //   oneEmployee: {
-    //     type: "GET",
-    //     endpoint: "/employee?eId=:id",
-    //   },
-    //   updatedEmployee: {
-    //     type: "PATCH",
-    //     endpoint: "/employee/:id",
-    //   },
-    //   oneEmployeeId: {
-    //     type: "GET",
-    //     endpoint: "/employee/:id",
-    //   },
-    //   addEmployee: {
-    //     type: "POST",
-    //     endpoint: "/employee",
-    //   },
-    //   documentEmployee: {
-    //     type: "GET",
-    //     endpoint: "/employeedocument?eId=:id",
-    //   },
-    //   uploadEmployeeDocument: {
-    //     type: "POST",
-    //     endpoint: "/employeedocument",
-    //   },
-    //   deleteEmployeeDocument: {
-    //     type: "DELETE",
-    //     endpoint: "/employeedocument/:id",
-    //   },
-    //   leaverequest: {
-    //     type: "POST",
-    //     endpoint: "/leaverequest",
-    //   },
-    //   leaverequestUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/leaverequest/:id",
-    //   },
-    //   leaverequestDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/leaverequest/:id",
-    //   },
-    //   TimeoffEmployee: {
-    //     type: "GET",
-    //     endpoint: "/leaverequest?eId=:id",
-    //   },
-    //   inventory: {
-    //     type: "GET",
-    //     endpoint: "/inventoryinward",
-    //   },
-    //   inventoryUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/inventoryinward/:id",
-    //   },
-    //   inventoryDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/inventoryinward/:id",
-    //   },
-    //   inventoryCreate: {
-    //     type: "POST",
-    //     endpoint: "/inventoryinward",
-    //   },
-    //   inventoryById: {
-    //     type: "GET",
-    //     endpoint: "/inventoryinward/:id",
-    //   },
-    //   AllEquipment: {
-    //     type: "GET",
-    //     endpoint: "/equipment",
-    //   },
-    //   equipmentById: {
-    //     type: "GET",
-    //     endpoint: "/equipment/:id",
-    //   },
-    //   updateequipment: {
-    //     type: "PATCH",
-    //     endpoint: "/equipment/:id",
-    //   },
-    //   equipment: {
-    //     type: "POST",
-    //     endpoint: "/equipment",
-    //   },
-    //   maintenance: {
-    //     type: "GET",
-    //     endpoint: "/maintenancerequest",
-    //   },
-    //   documentEquipment: {
-    //     type: "GET",
-    //     endpoint: "/equipmentdocument?equipmentId=:id",
-    //   },
-    //   uploadEquipmentDocument: {
-    //     type: "POST",
-    //     endpoint: "/equipmentdocument",
-    //   },
-    //   deleteEquipmentDocument: {
-    //     type: "DELETE",
-    //     endpoint: "/equipmentdocument/:id",
-    //   },
-    //   purchaserequesition: {
-    //     type: "POST",
-    //     endpoint: "/purchaserequesition",
-    //   },
-    //   purchaserequesitionUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/purchaserequesition/:id",
-    //   },
-    //   purchaserequesitionDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/purchaserequesition/:id",
-    //   },
-    //   purchaserequesitiongetAll: {
-    //     type: "GET",
-    //     endpoint: "/purchaserequesition",
-    //   },
-    //   eventlogCreate: {
-    //     type: "POST",
-    //     endpoint: "/eventlog",
-    //   },
-    //   eventlogUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/eventlog/:id",
-    //   },
-    //   eventlogDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/eventlog/:id",
-    //   },
-    //   eventlogAll: {
-    //     type: "GET",
-    //     endpoint: "/eventlog",
-    //   },
-    //   cleaningCreate: {
-    //     type: "POST",
-    //     endpoint: "/cleaning",
-    //   },
-    //   cleaningUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/cleaning/:id",
-    //   },
-    //   cleaningDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/cleaning/:id",
-    //   },
-    //   cleaningAll: {
-    //     type: "GET",
-    //     endpoint: "/cleaning",
-    //   },
-    //   expanseCreate: {
-    //     type: "POST",
-    //     endpoint: "/expanse",
-    //   },
-    //   expanseUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/expanse/:id",
-    //   },
-    //   expanseDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/expanse/:id",
-    //   },
-    //   expanseAll: {
-    //     type: "GET",
-    //     endpoint: "/expanse",
-    //   },
-    //   vehicleexpanseCreate: {
-    //     type: "POST",
-    //     endpoint: "/vehicleexpanse",
-    //   },
-    //   vehicleexpanseUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/vehicleexpanse/:id",
-    //   },
-    //   vehicleexpanseDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/vehicleexpanse/:id",
-    //   },
-    //   vehicleexpanseAll: {
-    //     type: "GET",
-    //     endpoint: "/vehicleexpanse",
-    //   },
-    //   abtCreate: {
-    //     type: "POST",
-    //     endpoint: "/abt",
-    //   },
-    //   abtUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/abt/:id",
-    //   },
-    //   abtDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/abt/:id",
-    //   },
-    //   abtAll: {
-    //     type: "GET",
-    //     endpoint: "/abt",
-    //   },
-    //   maintenanceRequests: {
-    //     type: "GET",
-    //     endpoint: "/maintenancerequest",
-    //   },
-    //   equipmentcategory: {
-    //     type: "GET",
-    //     endpoint: "/equipmentcategory",
-    //   },
-    //   employmenttype: {
-    //     type: "GET",
-    //     endpoint: "/employmenttype",
-    //   },
-    //   shifts: {
-    //     type: "GET",
-    //     endpoint: "/shifts",
-    //   },
-    //   getAllManagers: {
-    //     type: "GET",
-    //     endpoint: "/employee",
-    //   },
-    //   getAlldepartment: {
-    //     type: "GET",
-    //     endpoint: "/department",
-    //   },
-    //   plantdocument: {
-    //     type: "GET",
-    //     endpoint: "/document",
-    //   },
-    //   plantdocumentDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/document/:id",
-    //   },
-    //   plantdocumentUpload: {
-    //     type: "POST",
-    //     endpoint: "/document",
-    //   },
-    //   getAllClients: {
-    //     type: "GET",
-    //     endpoint: "/client",
-    //   },
-    //   createClient: {
-    //     type: "POST",
-    //     endpoint: "/client",
-    //   },
-    //   updateClient: {
-    //     type: "PATCH",
-    //     endpoint: "/client/:id",
-    //   },
-    //   deleteClient: {
-    //     type: "DELETE",
-    //     endpoint: "/client/:id",
-    //   },
-    //   productCategory: {
-    //     type: "GET",
-    //     endpoint: "/productcategory",
-    //   },
-    //   getAllproduct: {
-    //     type: "GET",
-    //     endpoint: "/product",
-    //   },
-    //   createProduct: {
-    //     type: "POST",
-    //     endpoint: "/product",
-    //   },
-    //   createInventoryoutword: {
-    //     type: "POST",
-    //     endpoint: "/inventoryoutward",
-    //   },
-    //   TransferInventory: {
-    //     type: "GET",
-    //     endpoint: "/inventoryoutward/transfers",
-    //   },
-    //   TransferUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/inventoryoutward/:id",
-    //   },
-    //   TransferDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/inventoryoutward/:id",
-    //   },
-    //   inventoryProductCategory: {
-    //     type: "GET",
-    //     endpoint: "/productcategory",
-    //   },
-    //   equipmentProductCategory: {
-    //     type: "GET",
-    //     endpoint: "/equipmentcategory",
-    //   },
-    //   addinventoryProductCategory: {
-    //     type: "POST",
-    //     endpoint: "/productcategory",
-    //   },
-    //   deleteinventoryProductCategory: {
-    //     type: "DELETE",
-    //     endpoint: "/productcategory/:id",
-    //   },
-    //   updateinventoryProductCategory: {
-    //     type: "PATCH",
-    //     endpoint: "/productcategory/:id",
-    //   },
-    //   addequipmentProductCategory: {
-    //     type: "POST",
-    //     endpoint: "/equipmentcategory",
-    //   },
-    //   deleteequipmentProductCategory: {
-    //     type: "DELETE",
-    //     endpoint: "/equipmentcategory/:id",
-    //   },
-    //   updateequipmentProductCategory: {
-    //     type: "PATCH",
-    //     endpoint: "/equipmentcategory/:id",
-    //   },
-    //   getallvendors: {
-    //     type: "GET",
-    //     endpoint: "/vendor",
-    //   },
-    //   createvendor: {
-    //     type: "POST",
-    //     endpoint: "/vendor",
-    //   },
-    //   deletevendor: {
-    //     type: "DELETE",
-    //     endpoint: "/vendor/:id",
-    //   },
-    //   updatevendor: {
-    //     type: "PATCH",
-    //     endpoint: "/vendor/:id",
-    //   },
-    //   checkupgetAll: {
-    //     type: "GET",
-    //     endpoint: "/checkup",
-    //   },
-    //   checkupgetAdd: {
-    //     type: "POST",
-    //     endpoint: "/checkup",
-    //   },
-    //   checkupDelete: {
-    //     type: "DELETE",
-    //     endpoint: "/checkup/:id",
-    //   },
-    //   checkupUpdate: {
-    //     type: "PATCH",
-    //     endpoint: "/checkup/:id",
-    //   },
-    //   updatePlant: {
-    //     type: "PATCH",
-    //     endpoint: "/user/updateplant",
-    //   },
-    //   updatePassword: {
-    //     type: "PATCH",
-    //     endpoint: "/user/password",
-    //   },
-    //   movehistory: {
-    //     type: "GET",
-    //     endpoint: "/inventoryoutward/moves",
     //   },
   },
 

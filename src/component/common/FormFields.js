@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   AutoComplete,
   Button,
@@ -23,27 +23,19 @@ import dayjs from "dayjs";
 import FormList from "antd/es/form/FormList";
 import TextEditor from "./Text-Editor";
 import Heading from "./Heading";
-import moment from "moment";
+
 const FormFields = ({
   changedFields = {},
   formData = {},
-  menu,
+  menuFields = [],
   formFields = [],
   form,
   disabled = false,
-  normal = false,
-  threeField = false,
-  onlyField = false,
-  FieldId,
 }) => {
-  const [isSwitchDisalbe, setIsSwitchDisalbe] = useState(false);
-  const switchHandler = (checked) => {
-    console.log(checked);
-  };
   const AllFieldsData =
     formFields && Array.isArray(formFields) && formFields.length > 0
       ? formFields
-      : CONSTANTS.FORM_FIELD[menu];
+      : menuFields;
   const getInputFormate = (data) => {
     const normFile = (e) => {
       // console.log("Upload event:", e);
@@ -54,22 +46,25 @@ const FormFields = ({
     };
     switch (data.type) {
       case "date":
+        const DateRules = [
+          {
+            required: data?.required,
+            message: "Please select date!",
+          },
+        ];
+        Array.isArray(data?.rule) &&
+          data?.rule?.length > 1 &&
+          DateRules.push(...data?.rule);
         return (
           <Form.Item
             name={data.name}
             id={data.id}
-            className="form mt-2"
+            className="form "
             // initialValue={
             //   data?.defaultValue ? dayjs(data?.defaultValue) : dayjs(new Date())
             // }
-            rules={[
-              {
-                type: "object",
-                required: data?.required,
-                message: "Please select date!",
-              },
-              data.rule && data.rule,
-            ]}
+            required={data?.required}
+            rules={DateRules}
           >
             <DatePicker
               showTime={data?.showTime ? { format: data?.showTime } : false}
@@ -84,24 +79,26 @@ const FormFields = ({
           </Form.Item>
         );
       case "time":
+        const TimeRules = [
+          {
+            required: data?.required,
+            message: "Please select date!",
+          },
+        ];
+        Array.isArray(data?.rule) &&
+          data?.rule?.length > 1 &&
+          TimeRules.push(...data?.rule);
         return (
           <Form.Item
             name={data?.name}
             id={data?.id}
-            className="form mt-2"
+            className="form "
             // initialValue={
             //   data?.defaultValue
             //     ? dayjs(moment(data?.defaultValue))
             //     : dayjs(moment())
             // }
-            rules={[
-              {
-                type: "object",
-                required: data?.required,
-                message: "Please select time!",
-              },
-              data.rule && data.rule,
-            ]}
+            rules={TimeRules}
           >
             <TimePicker
               showTime={data?.showTime}
@@ -115,19 +112,22 @@ const FormFields = ({
           </Form.Item>
         );
       case "autocomplete":
+        const AutoCompleteRules = [
+          {
+            type: "text",
+            required: data?.required,
+            message: "Please input date!",
+          },
+        ];
+        Array.isArray(data?.rule) &&
+          data?.rule?.length > 1 &&
+          AutoCompleteRules.push(...data?.rule);
         return (
           <Form.Item
             name={data.name}
             id={data.id}
-            className="form mt-2"
-            rules={[
-              {
-                type: "text",
-                required: data?.required,
-                message: "Please input date!",
-              },
-              data.rule && data.rule,
-            ]}
+            className="form "
+            rules={AutoCompleteRules}
           >
             <AutoComplete
               disabled={data?.disabled && formData[data?.name]}
@@ -141,20 +141,24 @@ const FormFields = ({
           </Form.Item>
         );
       case "select":
+        const SelectRules = [
+          {
+            required: data?.required,
+            message: "Please select Valid " + data.Label,
+          },
+        ];
+        Array.isArray(data?.rule) &&
+          data?.rule?.length > 1 &&
+          SelectRules.push(...data?.rule);
         return (
           <>
             <Form.Item
               name={data.name}
               id={data.id}
-              className="form mt-2"
+              className="form "
               initialValue={data?.defaultValue}
               hasFeedback
-              rules={[
-                {
-                  required: data?.required,
-                  message: "Please select Valid " + data.Label,
-                },
-              ]}
+              rules={SelectRules}
             >
               <Select
                 disabled={data?.disabled && formData[data?.name]}
@@ -188,7 +192,7 @@ const FormFields = ({
           <Form.Item className="form mt-2">
             <Form.Item
               name={data.id}
-              className="form mt-2"
+              className="form "
               valuePropName="fileList"
               getValueFromEvent={normFile}
               noStyle
@@ -224,7 +228,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             id={data.id}
             valuePropName="fileList"
             getValueFromEvent={normFile}
@@ -253,7 +257,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             rules={[
               {
                 required: data?.required,
@@ -280,7 +284,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             rules={[
               // {
               //   required: data?.required,
@@ -320,7 +324,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             id={data.id}
             required={data?.required}
             valuePropName="checked"
@@ -338,7 +342,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             rules={[
               {
                 required: data?.required,
@@ -360,7 +364,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             style={{ height: "250px" }}
             rules={[
               {
@@ -384,7 +388,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             rules={[
               {
                 required: data?.required,
@@ -416,138 +420,17 @@ const FormFields = ({
         );
       case "switch":
         return (
-          <Row>
-            <Col span={12}>
-              <Form.Item id={data?.id} initialValue={false} name={data?.name} >
-                <Switch
-                  className="mt-2"
-                  defaultChecked={(formData && formData[data.name]) || false}
-                  onChange={() => {
-                    // setIsSwitchDisalbe((prev) => !prev);
-                  }}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-        );
-      case "option":
-        return (
-          <Form.Item
-            name={data?.name}
-            id={data?.id}
-            className="form mt-2"
-            rules={[
-              {
-                required: data?.required,
-                message: "Please enter Option!",
-              },
-              data.rule && data.rule,
-            ]}
-            initialValue={[
-              {
-                [data?.name + 1]: "",
-                [data?.name + 2]: "",
-                [data?.name + 3]: "",
-                [data?.name + 4]: "",
-                ...formData[data?.name],
-              },
-            ]}
-          >
-            <Input.Group name={data?.name} id={data?.id} onChange={console.log}>
-              <Form.Item name={data?.name + 1} id={data?.id + 1}>
-                <Input
-                  style={{ width: "100%", borderRadius: "5pt" }}
-                  placeholder="Option 1"
-                  className="form mt-2"
-                  disabled={data?.disabled && formData[data?.name]}
-                />
-              </Form.Item>
-              <Form.Item name={data?.name + 2} id={data?.id + 2}>
-                <Input
-                  style={{ width: "100%", borderRadius: "5pt" }}
-                  placeholder="Option 2"
-                  className="form mt-2"
-                  disabled={data?.disabled && formData[data?.name]}
-                />
-              </Form.Item>
-              <Form.Item name={data?.name + 3} id={data?.id + 3}>
-                <Input
-                  style={{ width: "100%", borderRadius: "5pt" }}
-                  placeholder="Option 3"
-                  className="form mt-2"
-                  disabled={data?.disabled && formData[data?.name]}
-                />
-              </Form.Item>
-              <Form.Item name={data?.name + 4} id={data?.id + 4}>
-                <Input
-                  style={{ width: "100%", borderRadius: "5pt" }}
-                  placeholder="Option 4"
-                  className="form mt-2"
-                  disabled={data?.disabled && formData[data?.name]}
-                />
-              </Form.Item>
-            </Input.Group>
+          <Form.Item id={data?.id} initialValue={false} name={data?.name}>
+            <Switch
+              className="mt-2"
+              disabled={
+                data?.disabled &&
+                (formData[data?.name] === false ||
+                  formData[data?.name] === true)
+              }
+              defaultChecked={(formData && formData[data.name]) || false}
+            />
           </Form.Item>
-        );
-      case "entryfee":
-        return (
-          <Row>
-            <Col span={2}>
-              <Switch
-                defaultChecked
-                className="mt-2"
-                onChange={() => {
-                  setIsSwitchDisalbe((prev) => !prev);
-                }}
-              />
-            </Col>
-            <Col span={22}>
-              <Form.Item
-                name={data.name}
-                className="form pl-5 mt-1"
-                rules={[
-                  {
-                    required: data?.required,
-                    message: "Please Enter valid " + data.Label,
-                  },
-                  {
-                    type: data.type,
-                    message: "Please Enter valid Number",
-                  },
-                ]}
-              >
-                <InputNumber
-                  disabled={isSwitchDisalbe}
-                  placeholder={data.placeholder ? data.placeholder : ""}
-                  controls={false}
-                  style={{
-                    width: "100%",
-                  }}
-                  value={(formData && formData[data.id]) || 0}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-        );
-      case "translation":
-        return (
-          <>
-            <Row gutter={[16, 16]}>
-              {data?.field.map((field) => (
-                <Col span={`${field.id === "description" ? 24 : 12}`}>
-                  {getInputFormate(field)}
-                </Col>
-              ))}
-            </Row>
-            <Row gutter={[32, 16]}>
-              <Col>
-                <Button> + Add New Translation </Button>
-              </Col>
-              <Col>
-                <Button> Remove Translation </Button>
-              </Col>
-            </Row>
-          </>
         );
       case "extraMultiSingle":
         return (
@@ -599,11 +482,9 @@ const FormFields = ({
       case "multifield":
         return (
           <div className="ml-2">
-
             <FormList
               name={data?.name}
               id={data?.id}
-
               initialValue={data?.initialValue}
               // initialValue={[
               //   {
@@ -629,23 +510,22 @@ const FormFields = ({
             >
               {(fields, { add, remove }) => (
                 <>
-
                   {fields.map((field, index) => (
                     <>
                       <Heading>{data?.menuLabel}</Heading>
-                      {CONSTANTS.FORM_FIELD[data?.menu].map((dataField) =>
+                      {CONSTANTS.FORM_FIELD[data?.menu].map((dataField) => (
                         <>
-
-                          <Label required={dataField.required}>{dataField.Label}</Label>
+                          <Label required={dataField.required}>
+                            {dataField.Label}
+                          </Label>
                           {getInputFormate({
                             ...dataField,
                             name: [field.name, dataField.name],
                             id: [field.id, dataField.id],
                             key: field.key,
-
                           })}
                         </>
-                      )}
+                      ))}
                       <Form.Item key={field.key}>
                         <Button onClick={() => remove(field.name)}>
                           {data?.removeName || "Remove Field"}
@@ -675,7 +555,7 @@ const FormFields = ({
         return (
           <Form.Item
             name={data.name}
-            className="form mt-2"
+            className="form "
             id={data.id}
             required={data?.required}
             rules={rule}
@@ -691,7 +571,7 @@ const FormFields = ({
   };
 
   useEffect(() => {
-    if (form && !onlyField) {
+    if (form) {
       form.resetFields();
       if (Object.keys(formData).length) {
         const Fields = [];
@@ -711,7 +591,7 @@ const FormFields = ({
           formData[el.name] = dayjs(formData[el.name]);
         });
         Fields.filter((el) => el?.type === "time").forEach((el) => {
-          formData[el.name] = dayjs(formData[el.name], 'HH:mm:ss');
+          formData[el.name] = dayjs(formData[el.name], "HH:mm:ss");
         });
 
         Fields.filter(
@@ -723,150 +603,7 @@ const FormFields = ({
       }
     }
   }, [form, formData, AllFieldsData]);
-  if (threeField) {
-    return (
-      <Form
-        form={form}
-        disabled={disabled}
-        name="form_in_modal"
-        scrollToFirstError
-        onFieldsChange={(value) => {
-          changedFields[value[0].name] = value[0].value;
-          // console.log(changedFields, "changed");
-        }}
-      >
-        {AllFieldsData.map((data) => {
-          if (!data.item) {
-            return (
-              <Row align={"middle"} key={data.id}>
-                <Label required={data.required}>{data.Label}</Label>
-                <Col span={4}></Col>
-                <Col span={24}>{getInputFormate(data)}</Col>
-              </Row>
-            );
-          } else {
-            return (
-              <Row key={data.id}>
-                <Col span={8}>
-                  <Row align={"middle"}>
-                    <Label required={data.item[0].required}>
-                      {data.item[0].Label}
-                    </Label>
-                    <Col span={4}></Col>
-                    <Col span={20}>{getInputFormate(data.item[0])}</Col>
-                    <Col span={4}></Col>
-                  </Row>
-                </Col>
-                <Col span={8}>
-                  {data.item[1] && (
-                    <Row align={"middle"}>
-                      <Label required={data.item[1].required}>
-                        {data.item[1].Label}
-                      </Label>
-                      <Col span={4}></Col>
-                      <Col span={20}>{getInputFormate(data.item[1])}</Col>
-                    </Row>
-                  )}
-                </Col>
-                <Col span={8}>
-                  {data.item[2] && (
-                    <Row align={"middle"}>
-                      <Label required={data.item[2].required}>
-                        {data.item[2].Label}
-                      </Label>
-                      <Col span={4}></Col>
-                      <Col span={20}>{getInputFormate(data.item[2])}</Col>
-                    </Row>
-                  )}
-                </Col>
-              </Row>
-            );
-          }
-        })}
-      </Form>
-    );
-  }
-  if (normal) {
-    return (
-      <Form
-        form={form}
-        disabled={disabled}
-        name="form_in_modal"
-        scrollToFirstError
-        style={{ width: "100%", paddingInline: "20px" }}
-      >
-        <Row justify="space-between">
-          {AllFieldsData.map((data) => {
-            if (!data.item) {
-              return (
-                <Col key={data.id} span={data.width ? data.width : 8}>
-                  <Label required={data.required}>{data.Label}</Label>
-                  <Row align={"middle"} key={data.id}>
-                    <Col span={24}>{getInputFormate(data)}</Col>
-                  </Row>
-                </Col>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </Row>
-      </Form>
-    );
-  }
-  if (onlyField) {
-    return (
-      <>
-        {AllFieldsData.map((data) => {
-          if (!data.item) {
-            return (
-              <Row align={"middle"} key={data.id}>
-                <Col span={4}>
-                  <Label required={data.required}>{data.Label}</Label>
-                </Col>
-                <Col span={20}>
-                  {getInputFormate({
-                    ...data,
-                    id: `${data?.id}-${FieldId}`,
-                    name: `${data?.name}-${FieldId}`,
-                  })}
-                </Col>
-              </Row>
-            );
-          } else {
-            return (
-              <Row key={data.id}>
-                <Col span={12}>
-                  <Row align={"middle"}>
-                    <Col span={8}>
-                      <Label required={data.item[0].required}>
-                        {data.item[0].Label}
-                      </Label>
-                    </Col>
-                    <Col span={12}>{getInputFormate(data.item[0])}</Col>
-                    <Col span={4}></Col>
-                  </Row>
-                </Col>
-                <Col span={12}>
-                  {data.item[1] && (
-                    <Row align={"middle"}>
-                      <Col span={4}></Col>
-                      <Col span={8}>
-                        <Label required={data.item[1].required}>
-                          {data.item[1].Label}
-                        </Label>
-                      </Col>
-                      <Col span={12}>{getInputFormate(data.item[1])}</Col>
-                    </Row>
-                  )}
-                </Col>
-              </Row>
-            );
-          }
-        })}
-      </>
-    );
-  }
+
   return (
     <Form
       form={form}
@@ -878,47 +615,52 @@ const FormFields = ({
         // console.log(changedFields, "changed");
       }}
     >
-      {AllFieldsData.map((data) => {
-        if (!data.item) {
+      <Row justify="center" align="center" gutter={[16, 0]}>
+        {AllFieldsData.map((data) => {
           return (
-            <Row align={"middle"} key={data.id}>
-              <Col span={4}>
-                <Label required={data.required}>{data.Label}</Label>
-              </Col>
-              <Col span={20}>{getInputFormate(data)}</Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Row key={data.id}>
-              <Col span={12}>
-                <Row align={"middle"}>
-                  <Col span={8}>
-                    <Label required={data.item[0].required}>
-                      {data.item[0].Label}
-                    </Label>
+            // <Col
+            //   span={data?.width || 24}
+            //   style={{ marginTop: "10px", marginBottom: "10px" }}
+            // >
+            //   <Row>
+            //     {data?.labelwidth && (
+            //       <Col
+            //         span={data?.labelwidth}
+            //         style={{
+            //           display: "flex",
+            //           alignItems: "center",
+            //           justifyContent: "flex-start",
+            //         }}
+            //       >
+            //         <Label required={data.required}>{data.Label}</Label>
+            //       </Col>
+            //     )}
+            //     <Col span={24 - +data?.labelwidth}>{getInputFormate(data)}</Col>
+            //   </Row>
+            // </Col>
+            <Col
+              span={data?.width || 24}
+              style={{ marginTop: "10px", marginBottom: "10px" }}
+            >
+              <Row>
+                {data?.labelwidth && (
+                  <Col
+                    span={24}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Label required={data.required}>{data.Label}</Label>
                   </Col>
-                  <Col span={12}>{getInputFormate(data.item[0])}</Col>
-                  <Col span={4}></Col>
-                </Row>
-              </Col>
-              <Col span={12}>
-                {data.item[1] && (
-                  <Row align={"middle"}>
-                    <Col span={4}></Col>
-                    <Col span={8}>
-                      <Label required={data.item[1].required}>
-                        {data.item[1].Label}
-                      </Label>
-                    </Col>
-                    <Col span={12}>{getInputFormate(data.item[1])}</Col>
-                  </Row>
                 )}
-              </Col>
-            </Row>
+                <Col span={24}>{getInputFormate(data)}</Col>
+              </Row>
+            </Col>
           );
-        }
-      })}
+        })}
+      </Row>
     </Form>
   );
 };
