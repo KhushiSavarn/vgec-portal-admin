@@ -205,10 +205,10 @@ const Dashboard = () => {
       <CRUDComponent
         GET={{
           API: CONSTANTS.API.Technology.getAll,
-          DataModifier: (res) => {
-            console.log(res, "GET ALL ABCD");
-            return res;
-          },
+          // DataModifier: (res) => {
+          //   console.log(res, "GET ALL ABCD");
+          //   return res;
+          // },
           column: CONSTANTS.TABLE.TECHNOLOGY,
         }}
         UPDATE={{
@@ -216,14 +216,14 @@ const Dashboard = () => {
           message: "Updated Technology successfully",
           modaltitle: "Update Technology",
           modalFields: CONSTANTS.FORM_FIELD.TECHNOLOGY_MODAL,
-          payloadModifier: (res) => res,
+          // payloadModifier: (res) => res,
         }}
         CREATE={{
           API: CONSTANTS.API.Technology.craete,
           message: "Craeyed Technology successfully",
           modaltitle: "add Technology",
           modalFields: CONSTANTS.FORM_FIELD.TECHNOLOGY_MODAL,
-          payloadModifier: (res) => res,
+          // payloadModifier: (res) => res,
         }}
         DELETE={{
           API: CONSTANTS.API.Technology.delete,

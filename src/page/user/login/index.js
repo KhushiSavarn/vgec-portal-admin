@@ -24,33 +24,33 @@ const LogIn = () => {
   // }
   // }, [navigate]);
   // navigate(appRoot);
-  const api = useHttp();
-  const onFinishFirst = (value) => {
-    // console.log(value);
-    const payload = {
-      email: value.email,
-      password: value.password,
-    };
-    // API.sendRequest(
-    //   CONSTANTS.API.login,
-    //   (res) => {
-    //     console.log(res?.token, "abc");
-    //     setAuthDetails(res?.token);
-    //     setLoadings([]);
-    //     // navigate(appRoot);
-    //     window.location.assign(appRoot);
-    //     console.log(
-    //       getAuthToken() !== undefined && getAuthToken() !== null,
-    //       "loh2",
-    //       getAuthToken()
-    //     );
-    //   },
-    //   payload,
-    //   "logIn Successful"
-    // );
+  const API = useHttp();
+  // const onFinishFirst = (value) => {
+  //   // console.log(value);
+  //   const payload = {
+  //     email: value.email,
+  //     password: value.password,
+  //   };
+  //   API.sendRequest(
+  //     CONSTANTS.API.login,
+  //     (res) => {
+  //       console.log(res?.token, "abc");
+  //       setAuthDetails(res?.token);
+  //       setLoadings([]);
+  //       // navigate(appRoot);
+  //       window.location.assign(appRoot);
+  //       console.log(
+  //         getAuthToken() !== undefined && getAuthToken() !== null,
+  //         "loh2",
+  //         getAuthToken()
+  //       );
+  //     },
+  //     payload,
+  //     "logIn Successful"
+  //   );
 
-    // notification.success({ message: "Log in ", duration: "2" });
-  };
+  //   // notification.success({ message: "Log in ", duration: "2" });
+  // };
   const [loadings, setLoadings] = useState([]);
 
   const validateLogin = (value) => {
@@ -58,33 +58,33 @@ const LogIn = () => {
       email: value.email,
       password: value.password,
     };
-    window.location.assign(appRoot);
+    // window.location.assign(appRoot);
     // console.log(payload);
-    //   api.sendRequest(
-    //     CONSTANTS.API.login,
-    //     (res) => {
-    //       setAuthDetails(res?.token);
-    //       setLoadings([]);
-    //       window.location.assign(appRoot);
-    //     },
-    //     payload,
-    //     "LogIn Successful"
-    //   );
+    API.sendRequest(
+      CONSTANTS.API.login,
+      (res) => {
+        setAuthDetails(res?.token);
+        // setLoadings([]);
+        window.location.assign(appRoot);
+      },
+      payload,
+      "LogIn Successful"
+    );
   };
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 3000);
-  };
+  // const enterLoading = (index) => {
+  //   setLoadings((prevLoadings) => {
+  //     const newLoadings = [...prevLoadings];
+  //     newLoadings[index] = true;
+  //     return newLoadings;
+  //   });
+  //   setTimeout(() => {
+  //     setLoadings((prevLoadings) => {
+  //       const newLoadings = [...prevLoadings];
+  //       newLoadings[index] = false;
+  //       return newLoadings;
+  //     });
+  //   }, 3000);
+  // };
   return (
     <>
       {/* <Row className="form-2" gutter={[0, 4]}>
@@ -248,10 +248,8 @@ const LogIn = () => {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    loading={loadings[2]}
-                    onClick={() => {
-                      enterLoading(2);
-                    }}
+                    loading={API?.isLoading}
+
                     // disabled
                   >
                     Log in
