@@ -161,6 +161,7 @@ const CRUDComponent = (props) => {
         CREATE?.API,
         () => {
           setRefresh((prev) => !prev);
+          setCreateOpen(false);
           clear();
         },
         payload,
@@ -221,7 +222,7 @@ const CRUDComponent = (props) => {
     }
   }, []);
   return (
-    <Row className="container-main">
+    <Row className="gap-4 mt-6">
       {CREATE && CREATE?.API && CREATE?.modalFields && (
         <ModalFormCreator
           loading={API.isLoading}
@@ -233,7 +234,7 @@ const CRUDComponent = (props) => {
           menuFields={CREATE?.modalFields}
           formData={{}}
           name={CREATE?.modaltitle || `Add `}
-          SubmitName={"Update"}
+          SubmitName={"Submit"}
         />
       )}
       {UPDATE && UPDATE?.API && UPDATE?.modalFields && (
@@ -252,11 +253,7 @@ const CRUDComponent = (props) => {
         />
       )}
       {CREATE && CREATE?.API && (
-        <Row
-          style={{
-            marginBlock: "15px",
-          }}
-        >
+        <Row>
           <Button
             loading={API.isLoading}
             onClick={() => {
@@ -269,13 +266,7 @@ const CRUDComponent = (props) => {
       )}
       {GET?.column?.length && (
         <>
-          <Col
-            span={24}
-            style={{
-              marginBlock: "15px",
-            }}
-            className="container-body"
-          >
+          <Col span={24}>
             <CRUDTable
               dataSource={data}
               isLoading={API.isLoading}
@@ -294,13 +285,7 @@ const CRUDComponent = (props) => {
               }}
             />
           </Col>
-          <Col
-            span={24}
-            style={{
-              marginBlock: "15px",
-            }}
-            className="container-body"
-          >
+          <Col span={24}>
             <Pagination
               current={pagination?.current}
               pageSize={pagination?.pageSize}
@@ -309,7 +294,6 @@ const CRUDComponent = (props) => {
               onChange={(page, pageSize) => {
                 setPagination((prev) => ({ ...prev, pageSize, current: page }));
               }}
-              className="mt-16"
             />
           </Col>
         </>
@@ -336,7 +320,7 @@ CRUDComponent.propTypes = {
     modalFields: PropTypes.array.isRequired,
     modaltitle: PropTypes.string.isRequired,
     isFormData: PropTypes.bool.isRequired,
-    message: PropTypes.string.isRequired,
+    message: PropTypes.string,
   }),
   UPDATE: PropTypes.shape({
     API: PropTypes.shape({
@@ -347,7 +331,7 @@ CRUDComponent.propTypes = {
     modalFields: PropTypes.array.isRequired,
     modaltitle: PropTypes.string.isRequired,
     isFormData: PropTypes.bool.isRequired,
-    message: PropTypes.string.isRequired,
+    message: PropTypes.string,
   }),
 
   DELETE: PropTypes.shape({
@@ -355,7 +339,7 @@ CRUDComponent.propTypes = {
       type: PropTypes.string.isRequired,
       endpoint: PropTypes.string.isRequired,
     }).isRequired,
-    message: PropTypes.string.isRequired,
+    message: PropTypes.string,
   }),
   isSearch: PropTypes.bool,
 };
