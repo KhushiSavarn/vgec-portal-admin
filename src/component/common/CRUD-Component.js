@@ -15,6 +15,7 @@ import useHttp from "../../hooks/use-http";
 import CONSTANTS from "../../util/constant/CONSTANTS";
 import ModalFormCreator from "./ModalFormCreator";
 import CRUDTable from "./CRUD-Table";
+import CustomSearchBar from "./Custom-search";
 // import CustomTable from "../../../../component/common/Custom-Table";
 // import CONSTANTS from "../../../../util/constant/CONSTANTS";
 // import useHttp from "../../../../hooks/use-http";
@@ -45,9 +46,10 @@ const RenderEditButton = (value) => {
 };
 
 const CRUDComponent = (props) => {
-  const { GET, CREATE, UPDATE, DELETE } = props;
+  const { GET, CREATE, UPDATE, DELETE, isSearch = false } = props;
   const [data, setData] = useState([]);
   const [Allfilter, setAllFilter] = useState(null);
+  const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 20,
@@ -77,6 +79,9 @@ const CRUDComponent = (props) => {
           [`autogenerate-mul-array-$${el[0]}$`]: el[1],
         };
       });
+    }
+    if (search?.trim().length) {
+      QuaryParams = { ...QuaryParams, search };
     }
     GET &&
       GET?.API &&
@@ -135,7 +140,7 @@ const CRUDComponent = (props) => {
         },
         QuaryParams
       );
-  }, [refresh, pagination.current, pagination.pageSize, Allfilter]);
+  }, [refresh, pagination.current, pagination.pageSize, Allfilter, search]);
   //   const CSVData = [];
   //   CSVData[0] = CONSTANTS.TABLE.SETTING_ROUTINE_CHECKUP.map((el) => el.title);
   //   data.map((item, index) => {
@@ -221,6 +226,7 @@ const CRUDComponent = (props) => {
         });
     }
   }, []);
+
   return (
     <Row className="gap-4 mt-6">
       {CREATE && CREATE?.API && CREATE?.modalFields && (
@@ -253,7 +259,7 @@ const CRUDComponent = (props) => {
         />
       )}
       {CREATE && CREATE?.API && (
-        <Row>
+        <Col span={24}>
           <Button
             loading={API.isLoading}
             onClick={() => {
@@ -262,10 +268,18 @@ const CRUDComponent = (props) => {
           >
             Add
           </Button>
-        </Row>
+        </Col>
       )}
       {GET?.column?.length && (
         <>
+          {isSearch && (
+            <Col span={24} sm={24} md={20} lg={12} xl={10} xxl={8}>
+              <CustomSearchBar
+                setKeyword={(v) => setSearch(v)}
+                isSearch={isSearch}
+              />
+            </Col>
+          )}
           <Col span={24}>
             <CRUDTable
               dataSource={data}
